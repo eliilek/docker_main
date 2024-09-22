@@ -2,7 +2,7 @@ Docker Learning:
 	Docker works, multiple containers for different apps works, routing correctly requires correct launch commands (gunicorn/daphne)
 	Next steps - learn how to create/map subdomains so that nginx can correctly route waypoints.eli.com and kyo.eli.com or whatever without needing to fuck with ports
 
-Git is fucked, figure out how to delete submodules/sub-gits and make it all one thing. I could give a fuck about the history.
+Try to unfuck my local pipenv?
 
 Sort of done? - Link parsing for images
 DONE - Staff accounts should see the manager view, see/manage games they're allowed on
