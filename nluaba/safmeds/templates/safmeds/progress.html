@@ -1,0 +1,50 @@
+{% extends "safmeds/back_base.html" %}
+
+{% block content %}
+<h1>{{name}}</h1>
+  <table id="progress">
+    <tr>
+      <th>Created On</th>
+      <th>Correct Per Minute</th>
+      <th>Incorrect Per Minute</th>
+      <th>Duration</th>
+      <th>Total Correct</th>
+      <th>Total Incorrect</th>
+      <th>View Specific Responses</th>
+      {% if user.is_superuser %}
+      <th>Delete Timing</th>
+      {% endif %}
+    </tr>
+    {% for practice in practices %}
+      <tr>
+        <td>{{practice.created|date:"g:i:s M j, Y"}}</td>
+        <td>{{practice.correctPerMinute|floatformat:1}}</td>
+        <td>{{practice.incorrectPerMinute|floatformat:1}}</td>
+        <td>{{practice.templateDuration}}</td>
+        <td>{{practice.correct}}</td>
+        <td>{{practice.incorrect}}</td>
+        <td><a href="{% url 'safmeds:specific_result' practice.id %}">View Responses</a></td>
+        {% if user.is_superuser %}
+        <td><a class="button" onclick="return confirm('Are you sure?')" href="{% url 'safmeds:delete_timing' practice.id %}">Delete</a></td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+  <div class="pagination">
+    <span class="step-links">
+        {% if practices.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ practices.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ practices.number }} of {{ practices.paginator.num_pages }}.
+        </span>
+
+        {% if practices.has_next %}
+            <a href="?page={{ practices.next_page_number }}">Next</a>
+            <a href="?page={{ practices.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+    </span>
+  </div>
+{% endblock %}

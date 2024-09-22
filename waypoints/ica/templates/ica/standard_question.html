@@ -1,0 +1,95 @@
+<html>
+  <head>
+    {% load static %}
+    {% csrf_token %}
+      <meta charset="UTF-8">
+      <title>Automated ICA</title>
+      <link rel="stylesheet" href="{% static 'ica/style.css' %}">
+      <link rel="stylesheet" href="{% static 'ica/jqui/jquery-ui.css' %}">
+      <script src="{% static 'ica/jqui/external/jquery/jquery.js' %}"></script>
+      <script src="{% static 'ica/jqui/jquery-ui.js' %}"></script>
+      <script>
+        function timeout(){
+          window.location = "{% url 'logout' %}";
+        };
+      </script>
+      <script src="{% static 'ica/ica.js' %}"></script>
+  </head>
+  <body class="ica-body">
+    <h1>Automated ICA</h1>
+    <div class="horiz-holder">
+      <p class="test-info">Question {{current_question_number}} of {{total_question_number}}</p>
+    </div>
+    <div id="timeout-dialog" title="Timeout Warning">
+      You have been inactive for 8 minutes. At 10 minutes you will be logged out.
+    </div>
+    <div id="failed-submit-dialog" title="Answer Incomplete">
+      You must answer all prompts on this page before submitting your answers.
+    </div>
+
+
+    <div class="question">
+      {% if video_url %}
+        <video class="video" controls>
+          <source src="{{video_url}}" controls />
+        </video>
+      {% endif %}
+      {% if over_header %}
+        <p id="over-header">{{over_header}}</p>
+      {% endif %}
+
+      <form action="{% url 'ica:submit_response' %}" method="post" autocomplete="off" class="ica-form">
+        {% csrf_token %}
+        {% if question_type == "MC" %}
+          {% for response_answer in response_answers %}
+          <div class="response-div radio-div">
+            <p>{{response_answer.response_label}}</p>
+            {% for answer in response_answer.answers %}
+                <label for="answer-{{response_answer.pk}}" class="radio-label"><input type="radio" name="answer-{{response_answer.pk}}" value="{{answer}}" class="answer" />{{answer}}</label>
+              {% endfor %}
+          </div>
+          {% endfor %}
+        {% elif question_type == "SA" %}
+          {% if horizontal %}
+            <div class="horiz-response-div text-div">
+            {% for response_answer in response_answers %}
+              {% autoescape off %}
+              <label for="answer-{{response_answer.pk}}">{{response_answer.response_label}}<input type="text" name="answer-{{response_answer.pk}}" class="answer" /></label>
+              {% endautoescape %}
+            {% endfor %}
+            </div>
+          {% else %}
+            {% for response_answer in response_answers %}
+            <div class="response-div text-area-div">
+              {% autoescape off %}
+              <p>{{response_answer.response_label}}</p>
+              {% endautoescape %}
+              <textarea name="answer-{{response_answer.pk}}" rows="10" cols="30" class="answer" ></textarea>
+            </div>
+            {% endfor %}
+          {% endif %}
+        {% else %}
+          <table class="csa-table">
+            <tr>
+              <th>{{col_1_header}}</th>
+              <th>{{col_2_header}}</th>
+            </tr>
+              {% for response_answer in response_answers %}
+              {% if forloop.counter0|divisibleby:"2" %}
+                <tr>
+                  <td><input type="text" name="answer-{{response_answer.pk}}" class="answer" /></td>
+              {% else %}
+                  <td><input type="text" name="answer-{{response_answer.pk}}" class="answer" /></td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </table>
+        {% endif %}
+
+        <input type="hidden" value="{{question_response_pk}}" name="question_response_pk" />
+        <input type="submit" value="Submit Answer" />
+
+      </form>
+    </div>
+  </body>
+</html>

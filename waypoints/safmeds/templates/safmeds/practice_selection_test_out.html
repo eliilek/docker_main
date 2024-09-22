@@ -1,0 +1,15 @@
+{% extends "safmeds/back_base.html" %}
+
+{% block headscript %}
+{% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'cards/style.css' %}" />
+{% endblock %}
+{% block content %}
+<div id="select-participant">
+  <h1>{{ deck.name }}</h1>
+  <div class="participant-list" style="display:flex; flex-direction:column; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    <a href="{% url 'safmeds:practice_test_out' deck.id %}" class="button vert-button">Begin Test Out</a>
+    <a href="{% url 'safmeds:progress' deck.id %}" class="button vert-button">View Progress</a>
+  </div>
+  </div>
+{% endblock %}

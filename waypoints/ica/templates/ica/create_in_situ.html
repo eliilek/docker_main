@@ -1,0 +1,20 @@
+{% extends "ica/back_base.html" %}
+
+{% block content %}
+<form action="{% url 'ica:create_in_situ_report' %}" method="post" id="in-situ-form" class="ica-form">
+	{% csrf_token %}
+	<label for="technician">Technician Name: <input type="text" name="technician" id="technician" /></label>
+	<label for="users">Assigned BCBAs (ctrl to select multiple): <select name="users" id="users" multiple>
+		{% for user in users %}
+		<option value="{{user.pk}}">{{user.name}}</option>
+		{% endfor %}
+	</select></label>
+	<div id="required-questions">
+		<p>Required Sections:</p>
+		{% for question in questions %}
+			<label for="{{question.pk}}" class="radio-label"><input type="checkbox" name="required-{{question.pk}}"/>{{question.name}}</label>
+		{% endfor %}
+	</div>
+	<input type="submit" value="Submit" />
+</form>
+{% endblock %}

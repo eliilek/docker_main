@@ -1,0 +1,32 @@
+{% extends 'ica/back_base.html' %}
+
+{% load static %}
+{% block content %}
+  <table id="practice">
+    <tr>
+      <th>Section</th>
+      <th></th>
+      <th></th>
+    </tr>
+    {% for response in responses %}
+      <tr class="header-row">
+        <td>{{response.question_label|safe}}</td>
+        <td>Respondent: {{response.respondent}}</td>
+        <td></td>
+      </tr>
+      {% for answer in response.answers %}
+        <tr>
+          <td>{{answer.answered_timestamp|date:"g:i:s M j, Y"}}</td>
+          <td>{{answer.response_label|safe}}</td>
+          <td>{{answer.given_response}}</td>
+        </tr>
+      {% endfor %}
+      <tr class="spacer-row">
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    {% endfor %}
+
+  </table>
+{% endblock %}

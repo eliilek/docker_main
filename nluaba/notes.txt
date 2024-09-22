@@ -1,0 +1,28 @@
+To Invoice:
+  Latency Data 7/11 - 0.5 hours
+  Delete blank answers to support True/False - 0.5 hours
+  Record answers that are typed/selected but not submitted when time expires - 0.5 hours
+  Thesis readiness assessment - 1.75 hour models/structural setup 9/22
+  	5.75 hours 9/23
+  	1 hour 9/24
+  	1 hour 10/3
+  	3 hours 10/8
+  	2 hours 10/9
+  	1.75 hour 10/22
+    .75 hours 10/29
+    1.25 11/6
+    1 hours 11/23
+  __**__
+  3/18/21 - 2.5 hours adjusting reporting and aggregate values to use signals, caching
+  4/25/21 - 2.5 hours implementing Maintenance Probe
+  5/6/21 - .75 hours working on Maintenance Probe downloads
+  5/9 - .75 hours working on Maintenance Probe downloads
+  5/12 - .25 hours into maintenance CSS
+  5/14 - .75 hours finish CSS, downloads
+  5/16 - .75 hours finish downloads
+  6/4 - .25 hours
+
+  Maintenance Probe:
+    Figure out final structure, probably need to create a new model that's not a test
+    Search for existing maintenance with same courses to avoid db bloat
+    Idea - create maintenance with courses, that has the manager method to get random questions, return a new maintenanceinstance for that user?

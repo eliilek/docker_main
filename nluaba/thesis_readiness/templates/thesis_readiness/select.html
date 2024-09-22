@@ -1,0 +1,23 @@
+{% extends "thesis_readiness/back_base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div id="select-participant">
+  <h1>Select an Assessment</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    {% if assessments %}
+      {% for assessment in assessments %}
+      {% if download %}
+        <a href="{% url 'thesis_readiness:download_assessment' assessment.id %}" class="button horiz-button">{{ assessment.name }}</a>
+      {% else %}
+        <a href="{% url 'thesis_readiness:instructions' assessment.id %}" class="button horiz-button">{{ assessment.name }}</a>
+      {% endif %}
+      {% endfor %}
+    {% else %}
+      No assessments are available.
+    {% endif %}
+  </div>
+  </div>
+
+{% endblock %}

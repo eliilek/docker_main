@@ -1,0 +1,21 @@
+{% extends "exams/back_base.html" %}
+
+{% block headscript %}
+{% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'exams/style.css' %}" />
+{% endblock %}
+
+{% block content %}
+	<div class="flex-col">
+		<span class="instructions">Select all classes you have taken</span>
+		<div id="form-div">
+			<form action="{% url 'exams:maintenance_create' %}" method="post" id="course-select-form">
+				{% csrf_token %}
+				{% for course in courses %}
+				<input type="checkbox" id="checkbox-{{forloop.counter}}" name="checkbox-{{forloop.counter}}" value="{{course.pk}}">{{course.name}}
+				{% endfor %}
+				<input type="submit" id="maintenance-submit">
+			</form>
+		</div>
+	</div>
+{% endblock %}

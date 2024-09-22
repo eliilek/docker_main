@@ -1,0 +1,31 @@
+<html>
+  <head>
+    {% load static %}
+    {% csrf_token %}
+      <meta charset="UTF-8">
+      <title>Automated ICA</title>
+      <link rel="stylesheet" href="{% static 'ica/style.css' %}">
+      <link rel="stylesheet" href="{% static 'ica/jqui/jquery-ui.css' %}">
+      <script src="{% static 'ica/jqui/external/jquery/jquery.js' %}"></script>
+      <script src="{% static 'ica/jqui/jquery-ui.js' %}"></script>
+      <script>
+        function select_question(question_number){
+          window.location = "{% url 'ica:in_situ_assessment' %}/" + question_number.toString()
+        }
+        $(document).ready(function(){
+          $("#question_select").change(function(){
+            select_question(parseInt($("#question_select").val()));
+          });
+        });
+      </script>
+  </head>
+  <body class="ica-body">
+    <h1>Automated ICA</h1>
+      <select id='question_select'>
+        <option value="" selected>Section Select</option>
+      {% for question in question_dicts %}
+          <option value="{{question.pk}}">{{question.display|safe}}</option>
+      {% endfor %}
+      </select>
+    </body>
+  </html>

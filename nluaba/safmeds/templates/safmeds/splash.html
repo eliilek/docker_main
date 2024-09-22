@@ -1,0 +1,49 @@
+{% extends "safmeds/base.html" %}
+
+{% block content %}
+<div id="select-participant">
+  <h1>Select an App</h1>
+  <div class="column-container" style="display:flex; align-items:center; flex-wrap: nowrap; justify-content: space-evenly; width: 100%;">
+    <div class="column">
+      <h2>SAFMEDS</h2>
+      <a href="{% url 'safmeds:index' %}" class="button horiz-button">SAFMEDS</a>
+      {% if user.is_superuser %}
+        <a href="{% url 'safmeds:multi_upload' %}" class="button horiz-button">SAFMEDS Multi-Upload</a>
+        <a href="{% url 'safmeds:download_select' %}" class="button horiz-button">SAFMEDS Student Download</a>
+        <a href="{% url 'safmeds:download_deck_select' %}" class="button horiz-button">SAFMEDS Deck Download</a>
+      {% endif %}
+    </div>
+    <div class="column">
+      <h2>Practice Exams</h2>
+      <a href="{% url 'exams:index' %}" class="button horiz-button">Exams</a>
+      <a href="{% url 'exams:maintenance_probe_select' %}" class="button horiz-button">Maintenance Probe</a>
+      {% if user.is_superuser %}
+        <a href="{% url 'exams:multi_upload' %}" class="button horiz-button">Exams Multi-Upload</a>
+        <a href="{% url 'exams:download' %}" class="button horiz-button">Exams Deck Download</a>
+        <a href="{% url 'exams:download_student_select' %}" class="button horiz-button">Exams Student Download</a>
+      {% endif %}
+    </div>
+    <div class="column">
+      <h2>Real Exams</h2>
+      <a href="{% url 'realexams:index' %}" class="button horiz-button">Real Exams</a>
+      {% if user.is_superuser %}
+        <a href="{% url 'realexams:multi_upload' %}" class="button horiz-button">Real Exams Multi-Upload</a>
+        <a href="{% url 'realexams:download' %}" class="button horiz-button">Real Exams Download</a>
+        <a href="{% url 'realexams:download_student_select' %}" class="button horiz-button">Real Exams Student Download</a>
+      {% endif %}
+    </div>
+    {% if user.is_superuser or assessment %}
+    <div class="column">
+      <h2>Readiness Assessment</h2>
+      <a href="{% url 'thesis_readiness:index' %}" class="button horiz-button">Thesis Readiness Assessment</a>
+      {% if user.is_superuser %}
+        <a href="{% url 'thesis_readiness:multi_upload' %}" class="button horiz-button">Thesis Readiness Multi-Upload</a>
+        <a href="{% url 'thesis_readiness:multi_upload_2' %}" class="button horiz-button">Thesis Readiness Multi-Upload Part 2</a>
+        <a href="{% url 'thesis_readiness:download' %}" class="button horiz-button">Thesis Readiness Download</a>
+        <a href="{% url 'thesis_readiness:download_student_select' %}" class="button horiz-button">Thesis Readiness Student Download</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

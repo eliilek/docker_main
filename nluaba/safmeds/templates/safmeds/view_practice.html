@@ -1,0 +1,78 @@
+{% extends "safmeds/back_base.html" %}
+
+{% block headscript %}
+{% csrf_token %}
+  <script>
+    $(document).ready(function(e){
+      $(".mark-button").each(function(){
+        $(this).click(function(){
+          $(this).prop("disabled", true).css('opacity',0.5);
+          $.ajax({
+            'url':'{% url "safmeds:mark" %}',
+            'type':'POST',
+            'data':{'response':$(this).data("pk")},
+            'context':$(this),
+            'success':function(data){
+              if(data=="Success!"){
+              if($(this).html()=="Unmark Correct"){
+                $(this).html("Mark Correct");
+                $("#tr-"+$(this).data("pk")).removeClass("manual");
+                $("#td-corr-"+$(this).data("pk")).html("False");
+              } else {
+                $(this).html("Unmark Correct");
+                $("#td-corr-"+$(this).data("pk")).html("True");
+                $("#tr-"+$(this).data("pk")).addClass("manual");
+              };
+              $(this).prop("disabled", false).css('opacity',1);
+            } else {
+              alert(data);
+            }}
+          });
+        });
+      });
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+  function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+  <table id="practice">
+    <tr>
+      <th>Term</th>
+      <th>Definition</th>
+      <th>Response Given</th>
+      <th>Correct</th>
+      <th>Latency</th>
+      <th>Mark/Unmark Correct</th>
+    </tr>
+    {% for response in practice %}
+      {% if response.manual_correct %}
+        <tr class="manual" id="tr-{{response.pk}}">
+      {% else %}
+        <tr id="tr-{{response.pk}}">
+      {% endif %}
+        <td>{{response.card.term}}</td>
+        <td>{{response.card.definition}}</td>
+        <td>{{response.response}}</td>
+        <td id="td-corr-{{response.pk}}">{{response.correct}}</td>
+        <td>{{response.templateLatency}}</td>
+        {% if response.manual_correct %}
+          <td><button class='mark-button' data-pk='{{response.pk}}'>Unmark Correct</button></td>
+        {% else %}
+          <td><button class='mark-button' data-pk='{{response.pk}}'>Mark Correct</button></td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

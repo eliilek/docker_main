@@ -1,0 +1,23 @@
+{% extends "exams/back_base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div id="select-participant">
+  <h1>Select a Test</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    {% if tests %}
+      {% for test in tests %}
+      {% if download %}
+        <a href="{% url 'exams:download_test' test.id %}" class="button horiz-button">{{ test.name }}</a>
+      {% else %}
+        <a href="{% url 'exams:test_action' test.id %}" class="button horiz-button">{{ test.name }}</a>
+      {% endif %}
+      {% endfor %}
+    {% else %}
+      No tests are available.
+    {% endif %}
+  </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "exams/back_base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div id="select-participant">
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    <a href="{% url 'exams:maintenance_probe' %}" class="button horiz-button">Begin Maintenance Probe</a>
+    <a href="{% url 'exams:view_maintenance_data' %}" class="button horiz-button">View Data</a>
+    {% if superuser %}
+      <a href="{% url 'exams:select_maintenance_student' %}" class="button horiz-button">View Student Data</a>
+      <a href="{% url 'exams:download_maintenance_student_select' %}" class="button horiz-button">Download Student Data</a>
+      <a href="{% url 'exams:download_maintenance_course_select' %}" class="button horiz-button">Download Course Data</a>
+    {% endif %}
+  </div>
+  </div>
+
+{% endblock %}

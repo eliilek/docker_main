@@ -1,0 +1,19 @@
+{% extends "exams/back_base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div id="select-participant">
+  <h1>Select a Student</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    {% if students %}
+      {% for student in students %}
+        <a href="{% url 'exams:view_maintenance_data' student.pk %}" class="button horiz-button">{{ student.name }}</a>
+      {% endfor %}
+    {% else %}
+      No students are available.
+    {% endif %}
+  </div>
+  </div>
+
+{% endblock %}

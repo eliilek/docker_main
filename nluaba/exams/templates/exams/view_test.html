@@ -1,0 +1,53 @@
+{% extends 'exams/back_base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <h1>{{test}}</h1>
+  <br />
+  <table id="practice">
+    <tr>
+      {% if super %}
+      <th>Student</th>
+      {% endif %}
+      <th>Test Started</th>
+      <th>Number Correct</th>
+      <th>Number Incorrect</th>
+      <th>View Questions</th>
+      {% if super %}
+      <th>Delete Test Instance</th>
+      {% endif %}
+    </tr>
+    {% for instance in instances %}
+      <tr>
+        {% if super %}
+        <td>{{instance.student}}</td>
+        {% endif %}
+        <td>{{instance.created|date:"g:i:s M j, Y"}}</td>
+        <td>{{instance.correct}}</td>
+        <td>{{instance.incorrect}}</td>
+        <td><a href="{% url 'exams:view_instance_data' instance.pk %}">View</a></td>
+        {% if super %}
+        <td><a class="button" onclick="return confirm('Are you sure?')" href="{% url 'exams:delete_test_instance' instance.pk 'test' %}">Delete</a></td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+  <div class="pagination">
+    <span class="step-links">
+        {% if instances.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ instances.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ instances.number }} of {{ instances.paginator.num_pages }}.
+        </span>
+
+        {% if instances.has_next %}
+            <a href="?page={{ instances.next_page_number }}">Next</a>
+            <a href="?page={{ instances.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+    </span>
+  </div>
+{% endblock %}

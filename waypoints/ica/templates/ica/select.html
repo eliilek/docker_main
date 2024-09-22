@@ -1,0 +1,30 @@
+{% extends "ica/back_base.html" %}
+
+{% load static %}
+
+{% block content %}
+  {% if instances %}
+  <table>
+    <tr>
+      <th>Created</th>
+      <th>Finished</th>
+      <th>Duration</th>
+      <th>User</th>
+      <th>View Data</th>
+      <th>Delete</th>
+    </tr>
+    {% for instance in instances %}
+    <tr>
+      <td>{{instance.created|date:"g:i:s M j, Y"}}</td>
+      <td>{{instance.finished|date:"g:i:s M j, Y"}}</td>
+      <td>{{instance.duration}}</td>
+      <td>{{instance.user}}</td>
+      <td><a class="button" href="{% url 'ica:view_instance' instance.pk %}">View</a></td>
+      <td><a class="button" onclick="return confirm('Are you sure you want to delete this instance?')" href="{% url 'ica:delete_instance' instance.pk %}">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  Nobody has taken an assessment yet.
+  {% endif %}
+{% endblock %}

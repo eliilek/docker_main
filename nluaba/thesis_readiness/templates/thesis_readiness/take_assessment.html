@@ -1,0 +1,116 @@
+<html>
+  <head>
+    {% load static %}
+    {% load index %}
+    {% csrf_token %}
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+      <meta charset="UTF-8">
+      <title>Thesis Readiness Assessment</title>
+      <link rel="stylesheet" href="{% static 'thesis_readiness/style.css' %}">
+      <script>
+        function select_question(question_number){
+          window.location = "{% url 'thesis_readiness:take_assessment' assessment_id %}/" + question_number.toString()
+        }
+      </script>
+      <script src="{% static 'thesis_readiness/thesis_readiness.js' %}"></script>
+  </head>
+  <body>
+    <h1>{{name}}</h1>
+    <div class="horiz-holder">
+      {% if total_question_number %}
+        <p class="test-info">Question {{current_question_number}} of {{total_question_number}}</p>
+      {% else %}
+        <p class="test-info">Graph {{current_graph_number}} of {{total_graph_number}}</p>
+      {% endif %}
+    </div>
+    <div class="question">
+      {% if image_url %}
+        <img src="{{image_url}}" />
+      {% endif %}
+        <form action="{% url 'thesis_readiness:submit_response' assessment_id %}" method="post" autocomplete="off">
+        {% csrf_token %}
+        {% for question in questions %}
+          <div class="question-container">
+          <p class="question-text">{{question.text}}</p>
+          {% if question.question_type == "Short Answer" %}
+            {% if question.given_answer %}
+              <textarea name="answer{{question.id}}" class="answer" rows="10" cols="30">{{question.given_answer}}</textarea>
+            {% else %}
+              <textarea name="answer{{question.id}}" class="answer" rows="10" cols="30"></textarea>
+            {% endif %}
+          {% elif question.question_type == "Radio" %}
+            {% for answer in question.answers %}
+              {% if question.given_answer and question.given_answer == answer.text %}
+                <input type="radio" name="answer{{question.id}}" class="answer" value="{{answer.text}}" checked /> {{answer.text}}
+              {% else %}
+                <input type="radio" name="answer{{question.id}}" class="answer" value="{{answer.text}}" /> {{answer.text}}
+              {% endif %}
+              {% if question.answer_image_urls %}
+                {% if question.answer_image_urls|index:forloop.counter0 is not None %}
+                  <img src="{{question.answer_image_urls|index:forloop.counter0}}" /> <br>
+                {% else %}
+                  <br>
+                {% endif %}
+              {% else %}
+                <br>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            {% for answer in question.answers %}
+              {% if question.given_answer and answer.text in question.given_answer %}
+                <input type="checkbox" name="answer{{question.id}}" class="answer" value="{{answer.text}}" checked /> {{answer.text}}
+              {% else %}
+                <input type="checkbox" name="answer{{question.id}}" class="answer" value="{{answer.text}}" /> {{answer.text}}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+          </div>
+        {% endfor %}
+        <input type="submit" value="Submit Answers" disabled="true" />
+        {% if current_question_number %}
+          <input type="hidden" name="question_number" value={{current_question_number}} />
+        {% else %}
+          <input type="hidden" name="question_number" value={{current_graph_number}} />
+        {% endif %}
+      </form>
+    </div>
+    <div class="navigation">
+      {% if current_question_number %}
+      {% if current_question_number != 1 %}
+      <a class="navlink" href="{% url 'thesis_readiness:take_assessment' assessment_id current_question_number|add:'-2'%}" data-next-question="{{current_question_number|add:'-2'}}">Last Question</a>
+      {% endif %}
+      <select class='select'>
+        {% for i in total_question_range %}
+        {% if forloop.counter == current_question_number %}
+          <option value="{{forloop.counter0}}" selected>{{i|safe}}</option>
+        {% else %}
+          <option value="{{forloop.counter0}}">{{i|safe}}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+      {% if current_question_number != total_question_number %}
+      <a class="navlink" href="{% url 'thesis_readiness:take_assessment' assessment_id current_question_number %}" data-next-question="{{current_question_number}}">Next Question</a>
+      {% endif %}
+      {% else %}
+        {% if current_graph_number != 1 %}
+      <a class="navlink" href="{% url 'thesis_readiness:take_assessment' assessment_id current_graph_number|add:'-2'%}" data-next-question="{{current_graph_number|add:'-2'}}">Last Graph</a>
+      {% endif %}
+      <select class='select'>
+        {% for i in total_graph_range %}
+        {% if forloop.counter == current_graph_number %}
+          <option value="{{forloop.counter0}}" selected>{{i|safe}}</option>
+        {% else %}
+          <option value="{{forloop.counter0}}">{{i|safe}}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+      {% if current_graph_number != total_graph_number %}
+      <a class="navlink" href="{% url 'thesis_readiness:take_assessment' assessment_id current_graph_number %}" data-next-question="{{current_graph_number}}">Next Graph</a>
+      {% endif %}
+      {% endif %}
+    </div>
+  </body>
+</html>

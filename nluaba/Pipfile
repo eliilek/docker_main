@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version = "3.12"
+
+[packages]
+"psycopg2-binary" = "*"
+django-heroku = "*"
+gunicorn = "*"
+django-authtools = "*"
+django = "==2.2"
+awscli = "*"
+cloudinary = "*"
+python-dateutil = "*"
+boto3 = "*"
+django-storages = "*"
+django-rq = "*"
+unicodecsv = "*"
+
+[dev-packages]

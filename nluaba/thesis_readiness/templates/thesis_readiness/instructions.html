@@ -1,0 +1,18 @@
+<html>
+  <head>
+    {% load static %}
+    <title>Thesis Readiness Assessment</title>
+    <link rel="stylesheet" href="{% static 'thesis_readiness/style.css' %}">
+  </head>
+  <body>
+    <div id="content">
+      {{instructions|safe|linebreaks}}
+    </div>
+    <br><br>
+    {% if inst_set == 2 %}
+      <a href="{% url 'thesis_readiness:take_assessment' assessment_id %}" class="button">Begin Assessment</a>
+    {% else %}
+      <a href="{% url 'thesis_readiness:part_instructions' assessment_id %}" class="button">Continue</a>
+    {% endif %}
+  </body>
+</html>

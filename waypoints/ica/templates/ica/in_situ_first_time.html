@@ -1,0 +1,91 @@
+<html>
+  <head>
+    {% load static %}
+    {% csrf_token %}
+      <meta charset="UTF-8">
+      <title>Automated ICA</title>
+      <link rel="stylesheet" href="{% static 'ica/style.css' %}">
+      <link rel="stylesheet" href="{% static 'ica/jqui/jquery-ui.css' %}">
+      <script src="{% static 'ica/jqui/external/jquery/jquery.js' %}"></script>
+      <script src="{% static 'ica/jqui/jquery-ui.js' %}"></script>
+      <script>
+      	$(document).ready(function(){
+    		$( "#failed-submit-dialog" ).dialog({
+    			dialogClass: "no-close",
+  				modal: true,
+  				autoOpen: false,
+    			buttons: [
+    				{
+    					text: "OK",
+    					click: function(){
+    						warning_confirmed = true;
+    					$(this).dialog("close");
+    					}
+    				}
+    			]
+    		});
+    		$(".ica-form").submit(function(){
+    			if($('input.check-input').not(':checked').length > 0){
+    				$("#failed-submit-dialog").dialog('open');
+    				return false
+    			}
+    			return true
+    		})
+    	})
+      </script>
+  </head>
+  <body class="ica-body">
+	<div id="failed-submit-dialog" title="Answer Incomplete">
+      Please read and confirm all instructions before continuing.
+    </div>
+
+    {% if technician %}
+    <div class="technician-header">
+      Technician: {{technician}}
+    </div>
+
+    <div class="question">
+      {% if over_header %}
+        <p id="over-header">{{over_header}}</p>
+      {% endif %}
+
+      <form action="{% url 'ica:in_situ_first_time' instance_pk %}" method="post" autocomplete="off" class="ica-form">
+        {% csrf_token %}
+        <table>
+        <tr class="radio-tr">
+            <td><input type="checkbox" class="check-input" /></td>
+          	<td>When you open the assessment, the first task will pop up, but you can then select any of the tasks from the dropdown menu at the bottom.</td>
+          </tr>
+          <tr class="radio-tr">
+          	<td><input type="checkbox" class="check-input"  /></td>
+          	<td>Tasks <b><u>required</u></b> to be assessed will be marked with ** in the dropdown menu, but please feel free to submit assessment of any other tasks as well.</td>
+          </tr>
+          <tr class="radio-tr">
+          	<td><input type="checkbox" class="check-input"  /></td>
+          	<td>When you submit your assessment of a task, you'll be automatically taken to the next task in the list, but you can again then select any other one you want to assess from the menu. No need to go in order!</td>
+          </tr>
+          <tr class="radio-tr">
+          	<td><input type="checkbox" class="check-input"  /></td>
+          	<td>When all of the required tasks are assessed, you'll see a pop-up letting you know that you can end the assessment, but you can still continue to assess any other tasks if you want.</td>
+          </tr>
+          <tr class="radio-tr">
+          	<td><input type="checkbox" class="check-input"  /></td>
+          	<td>You don't have to finish the ICA in one go; you can close the window and come back to it later across as many session overlaps as needed.</td>
+          </tr>
+          <tr class="radio-tr">
+          	<td><input type="checkbox" class="check-input"  /></td>
+          	<td>For all of the tasks, be sure to only mark them off if you <b><u>directly</u></b> observe the procedures during sessions (with the exception of extinction and crisis management which are assessed during roleplay/discussion only)</td>
+          </tr>
+          <tr class="radio-tr">
+          	<td><input type="checkbox" class="check-input"  /></td>
+          	<td>If you mark any <b><u>required</u></b> steps as N/A, please include why in the notes section.</td>
+          </tr>
+          </table>
+
+        <input type="submit" value="Begin ICA" />
+
+      </form>
+    </div>
+    {% endif %}
+</body>
+</html>

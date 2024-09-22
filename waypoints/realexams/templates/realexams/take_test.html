@@ -1,0 +1,92 @@
+<html>
+  <head>
+    {% load static %}
+    {% load index %}
+    {% csrf_token %}
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+      <meta charset="UTF-8">
+      <title>Real Exams</title>
+      <link rel="stylesheet" href="{% static 'realexams/style.css' %}">
+      <script>
+        {% if elapsed_time %}
+          var timed = true;
+        {% else %}
+          var timed = false;
+        {% endif %}
+        function test_timeout(){
+          window.location = "{% url 'realexams:test_timeout' test_id %}";
+        };
+        function select_question(question_number){
+          window.location = "{% url 'realexams:take_test' test_id %}/" + question_number.toString()
+        }
+      </script>
+      <script src="{% static 'realexams/realexam.js' %}"></script>
+  </head>
+  <body>
+    <h1>{{name}}</h1>
+    <div class="horiz-holder">
+      <p class="test-info">Question {{current_question_number}} of {{total_question_number}}</p>
+      {% if elapsed_time %}
+        <p class="test-info"><span id="time_counter">{{elapsed_time}}</span> of <span id="total_time">{{total_time}}</span> elapsed</p>
+      {% endif %}
+    </div>
+    <div class="question">
+      {% if image_url %}
+        <img src="{{image_url}}" />
+      {% endif %}
+      <p id="question-text">{{text}}</p>
+      <form action="{% url 'realexams:submit_response' test_id %}" method="post" autocomplete="off">
+        {% csrf_token %}
+        {% if short_answer %}
+          {% if given_answer %}
+            <textarea name="answer" rows="10" cols="30">{{given_answer}}</textarea>
+          {% else %}
+            <textarea name="answer" rows="10" cols="30"></textarea>
+          {% endif %}
+        {% else %}
+          <div class="radio-div">
+          {% for answer in answers %}
+          {% if given_answer and given_answer == answer %}
+          <label for="answer" class="radio-label"><input type="radio" name="answer" value="{{answer}}" class="answer" checked /> {{answer}}</label>
+          {% else %}
+          <label for="answer" class="radio-label"><input type="radio" name="answer" value="{{answer}}" class="answer" /> {{answer}}</label>
+          {% endif %}
+          {% if answer_image_urls %}
+            <img src="{{answer_image_urls|index:forloop.counter0}}" /> <br>
+          {% else %}
+            <br>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+        <input type="submit" value="Submit Answer" disabled="true" />
+        <input type="hidden" name="question_number" value={{current_question_number}} />
+      </form>
+    </div>
+    <div class="navigation">
+      {% if current_question_number != 1 %}
+      <a class="navlink" href="{% url 'realexams:take_test' test_id current_question_number|add:'-2'%}" data-next-question="{{current_question_number|add:'-2'}}">Last Question</a>
+      {% endif %}
+      <select id='question_select'>
+        {% for i in total_question_range %}
+        {% if forloop.counter == current_question_number %}
+          <option value="{{forloop.counter0}}" selected>{{i|safe}}</option>
+        {% else %}
+          <option value="{{forloop.counter0}}">{{i|safe}}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+      {% if current_question_number != total_question_number %}
+      <a class="navlink" href="{% url 'realexams:take_test' test_id current_question_number %}" data-next-question="{{current_question_number}}">Next Question</a>
+      {% endif %}
+    </div>
+    <!--
+      Should show "Question X of Y", time remaining if applicable
+      Then some kind of box with the image if applicable, question text, 4 radio buttons with answers.
+      Submit Answer button
+      -->
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{% extends "exams/back_base.html" %}
+
+{% block content %}
+  <p>Copy/Paste from excel.</p>
+  <br>
+  <form action="{% url 'exams:multi_upload_report' %}" method="post" id="form">
+    {% csrf_token %}
+    <input type="submit" value="Submit"/>
+  </form>
+  <p>
+    Enter your questions here:
+    </p> <textarea name="questions" form="form" style="width:650px; height:400px;"></textarea>
+{% endblock %}

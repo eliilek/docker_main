@@ -1,0 +1,64 @@
+<html>
+  <head>
+    {% load static %}
+    {% csrf_token %}
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+      <meta charset="UTF-8">
+      <title>SAFMEDS</title>
+      <style>
+        body{
+          display:flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-direction: column;
+        }
+
+        #card{
+          border: 2px solid black;
+          padding: 20px;
+          width: 30%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+        }
+      </style>
+      <script>
+        var cards = {{ cards|safe }};
+        var practice_type = "{{practice_type|safe}}"
+        var deck = {{deck}};
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+      function report(payload, success){
+        $.post("{% url 'safmeds:report' %}", payload, function(data){
+          $(window).off("beforeunload");
+          success();
+        })
+      }
+      </script>
+    <script src="{% static 'cards/cards.js' %}"></script>
+  </head>
+  <body>
+    <div id="card">
+      <p id="definition"></p>
+      <p>
+        <b id="feedback"></b>
+      </p>
+      <input type="text" class="real_input" />
+      <button id="next">Next</button>
+    </div>
+    <button id="finish">Main Menu</button>
+  </body>
+</html>

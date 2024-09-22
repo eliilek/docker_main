@@ -1,0 +1,54 @@
+{% extends 'exams/back_base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <table id="practice">
+    <tr>
+      <th>Objectives</th>
+      <th>Question Text</th>
+      <th>Correct Answer</th>
+      <th>Given Answer</th>
+      <th>Correct</th>
+      <th>Incorrect Answer 1</th>
+      <th>Incorrect Answer 2</th>
+      <th>Incorrect Answer 3</th>
+      <th>Feedback</th>
+    </tr>
+    {% for response in responses %}
+      <tr>
+        <td>{{response.objective_str}}</td>
+        {% if response.question_image_url %}
+        <td>{{response.question}}<br><a href="{{response.question_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.question}}</td>
+        {% endif %}
+        {% if response.correct_answer_image_url %}
+        <td>{{response.correct_answer}}<br><a href="{{response.correct_answer_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.correct_answer}}</td>
+        {% endif %}
+        <td>{{response.given_answer}}</td>
+        <td>{{response.correct}}</td>
+        {% if response.incorrect_answer_1_image_url %}
+        <td>{{response.incorrect_answer_1}}<br><a href="{{response.incorrect_answer_1_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.incorrect_answer_1}}</td>
+        {% endif %}
+
+        {% if response.incorrect_answer_2_image_url %}
+        <td>{{response.incorrect_answer_2}}<br><a href="{{response.incorrect_answer_2_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.incorrect_answer_2}}</td>
+        {% endif %}
+        
+        {% if response.incorrect_answer_3_image_url %}
+        <td>{{response.incorrect_answer_3}}<br><a href="{{response.incorrect_answer_3_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.incorrect_answer_3}}</td>
+        {% endif %}
+        <td>{{response.feedback}}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

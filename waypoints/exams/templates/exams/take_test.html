@@ -1,0 +1,85 @@
+<html>
+  <head>
+    {% load static %}
+    {% load exam_delta %}
+    {% load index %}
+    {% csrf_token %}
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+      <meta charset="UTF-8">
+      <title>Exams</title>
+      <link rel="stylesheet" href="{% static 'exams/style.css' %}">
+      <script>
+        {% if elapsed_time %}
+          var timed = true;
+        {% else %}
+          var timed = false;
+        {% endif %}
+        function test_timeout(){
+          window.location = "{% url 'exams:test_timeout' test_id %}";
+        };
+        function select_question(question_number){
+          window.location = "{% url 'exams:take_test' test_id %}/" + question_number.toString()
+        }
+      </script>
+      <script src="{% static 'exams/exam.js' %}"></script>
+  </head>
+  <body>
+    <h1>{{name}}</h1>
+    <div class="horiz-holder">
+      <p class="test-info">Question {{current_question_number}} of {{total_question_number}}</p>
+      {% if elapsed_time %}
+        <p class="test-info"><span id="time_counter">{{elapsed_time}}</span> of <span id="total_time">{{total_time}}</span> elapsed</p>
+      {% endif %}
+    </div>
+    <div class="question">
+      {% if image_url %}
+        <img src="{{image_url}}" />
+      {% endif %}
+      <p id="question-text">{{text}}</p>
+      <form action="{% url 'exams:submit_response' test_id %}" method="post" autocomplete="off">
+        {% csrf_token %}
+        {% for answer in answers %}
+        <div class=answer-image-flex>
+        {% if given_answer and given_answer == answer %}
+        <input type="radio" name="answer" value="{{answer}}" checked /> {{answer}}
+        {% else %}
+        <input type="radio" name="answer" value="{{answer}}" /> {{answer}}
+        {% endif %}
+          {% if answer_image_urls %}
+            <img src="{{answer_image_urls|index:forloop.counter0}}" style="margin-left:10px;flex-shrink:0;"/> <br>
+          {% else %}
+            <br>
+          {% endif %}
+        </div>
+        {% endfor %}
+        <input type="submit" value="Submit Answer" disabled="true" />
+        <input type="hidden" name="question_number" value={{current_question_number}} />
+      </form>
+    </div>
+    <div class="navigation">
+      {% if current_question_number != 1 %}
+      <a class="navlink" href="{% url 'exams:take_test' test_id current_question_number|add:'-2'%}" data-next-question="{{current_question_number|add:'-2'}}">Last Question</a>
+      {% endif %}
+      <select id='question_select'>
+        {% for i in total_question_range %}
+        {% if forloop.counter == current_question_number %}
+          <option value="{{forloop.counter0}}" selected>{{i|safe}}</option>
+        {% else %}
+          <option value="{{forloop.counter0}}">{{i|safe}}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+      {% if current_question_number != total_question_number %}
+      <a class="navlink" href="{% url 'exams:take_test' test_id current_question_number %}" data-next-question="{{current_question_number}}">Next Question</a>
+      {% endif %}
+    </div>
+    <!--
+      Should show "Question X of Y", time remaining if applicable
+      Then some kind of box with the image if applicable, question text, 4 radio buttons with answers.
+      Submit Answer button
+      -->
+  </body>
+</html>

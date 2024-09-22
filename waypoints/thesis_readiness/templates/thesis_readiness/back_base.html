@@ -1,0 +1,8 @@
+{% extends "thesis_readiness/base.html" %}
+
+{% block return %}
+  <p>
+    <a href="{% url 'thesis_readiness:index' %}">Return to Main Menu?</a>
+    <a href="{% url 'splash' %}">Select a different app?</a>
+  </p>
+{% endblock %}

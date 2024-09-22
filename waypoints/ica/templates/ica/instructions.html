@@ -1,0 +1,13 @@
+{% extends "ica/back_base.html" %}
+
+{% block content %}
+<div id="content">
+	This assessment is not affiliated with nor endorsed by the Behavior Analyst Certification Board (BACB) in any way. For the most recent information on the BACB’s Initial and Renewal Competency Assessments for Registered Behavior Technicians (RBTs), visit https://www.bacb.com/rbt/.<br><br>
+
+	Please use a laptop or desktop computer with the Chrome or Firefox web browser to complete this assessment. As part of this assessment, you will respond to multiple choice and short answer questions, and will also practice collecting data from videos. The assessment is untimed, and may be completed across multiple sittings as needed. The assessment will close after 10 minutes of inactivity but may be resumed at any time.<br><br>
+
+	Please contact jessica.gamba@waypoints.life if you have any questions or run into any technical problems.
+</div>
+<br><br>
+<a href="{% url 'ica:begin_assessment'%}" class="button">Begin Test</a>
+{% endblock %}

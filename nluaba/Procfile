@@ -1,0 +1,2 @@
+web: gunicorn nluaba.wsgi
+worker: python manage.py rqworker default

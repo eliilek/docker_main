@@ -1,0 +1,36 @@
+{% extends "ica/back_base.html" %}
+
+{% load static %}
+
+{% block content %}
+  {% if instances %}
+  <table>
+    <tr>
+      <th>Created</th>
+      <th>Finished (if all sections completed)</th>
+      <th>Technician</th>
+      <th>Supervisors</th>
+      <th>Add/Remove Supervisors</th>
+      <th>View Data</th>
+      <th>Delete</th>
+    </tr>
+    {% for instance in instances %}
+    <tr>
+      <td>{{instance.created|date:"g:i:s M j, Y"}}</td>
+      {% if instance.finished %}
+      <td>{{instance.finished|date:"g:i:s M j, Y"}}</td>
+      {% else %}
+      <td><a class="button" href="{% url 'ica:mark_in_situ_complete' instance.pk %}">Mark</a></td>
+      {% endif %}
+      <td>{{instance.insituassessmentinstance.technician}}</td>
+      <td>{{instance.insituassessmentinstance.supervisor_names}}</td>
+      <td><a class="button" href="{% url 'admin:ica_insituassessmentinstance_change' instance.insituassessmentinstance.pk %}">Add/Remove</a></td>
+      <td><a class="button" href="{% url 'ica:view_instance' instance.pk %}">View</a></td>
+      <td><a class="button" onclick="return confirm('Are you sure you want to delete this instance?')" href="{% url 'ica:delete_instance' instance.pk %}">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  Nobody has completed an in-situ assessment yet.
+  {% endif %}
+{% endblock %}

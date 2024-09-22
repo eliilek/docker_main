@@ -1,0 +1,56 @@
+<html>
+  <head>
+    {% load static %}
+    {% csrf_token %}
+      <meta charset="UTF-8">
+      <title>Automated ICA</title>
+      <link rel="stylesheet" href="{% static 'ica/style.css' %}">
+      <link rel="stylesheet" href="{% static 'ica/jqui/jquery-ui.css' %}">
+      <script src="{% static 'ica/jqui/external/jquery/jquery.js' %}"></script>
+      <script src="{% static 'ica/jqui/jquery-ui.js' %}"></script>
+      <script>
+        function timeout(){
+          window.location = "{% url 'logout' %}";
+        };
+      </script>
+      <script src="{% static 'ica/ica.js' %}"></script>
+      <script src="{% static 'ica/dd.js' %}"></script>
+  </head>
+  <body class="ica-body">
+    <h1>Automated ICA</h1>
+    <div class="horiz-holder">
+      <p class="test-info">Question {{current_question_number}} of {{total_question_number}}</p>
+    </div>
+    <div id="timeout-dialog" title="Timeout Warning">
+      You have been inactive for 8 minutes. At 10 minutes you will be logged out.
+    </div>
+
+
+    <div class="question">
+      {% if over_header %}
+        <p id="over-header">{{over_header}}</p>
+      {% endif %}
+
+      <div id="shapes-holder">
+        {% for image in images %}
+        <img class="draggable-img" src="{{ image.image.url }}" id="{{ image.pk }}" />
+        {% endfor %}
+      </div>
+
+      <form action="{% url 'ica:submit_response' %}" method="post" autocomplete="off" class="ica-form">
+        {% csrf_token %}
+        {% for i in range %}
+          <div id="container-{{i}}" class='droppable-container'>
+            <div id="left-{{i}}" class="droppable-div left"></div>
+            <div id="right-{{i}}" class="droppable-div right"></div>
+            <input type="hidden" name="answer-left-{{i}}" id="answer-left-{{i}}" class="left" />
+            <input type="hidden" name="answer-right-{{i}}" id="answer-right-{{i}}" class="right" />
+          </div>
+        {% endfor %}
+      <input type="hidden" value="{{question_response_pk}}" name="question_response_pk" />
+      <input type="submit" value="Submit Answer" disabled="true" />
+
+      </form>
+    </div>
+  </body>
+</html>

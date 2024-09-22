@@ -1,0 +1,109 @@
+<html>
+  <head>
+    {% load static %}
+    {% csrf_token %}
+      <meta charset="UTF-8">
+      <title>Automated ICA</title>
+      <link rel="stylesheet" href="{% static 'ica/style.css' %}">
+      <link rel="stylesheet" href="{% static 'ica/jqui/jquery-ui.css' %}">
+      <script src="{% static 'ica/jqui/external/jquery/jquery.js' %}"></script>
+      <script src="{% static 'ica/jqui/jquery-ui.js' %}"></script>
+      <script src="{% static 'ica/in_situ.js' %}"></script>
+      <script>
+        function select_question(question_number){
+          window.location = "{% url 'ica:in_situ_assessment' %}/" + question_number.toString()
+        }
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+      function report(payload){
+        payload['user_pk'] = {{user.pk}};
+        $.post("{% url 'ica:submit_in_situ_response' %}", payload, function(data){
+          console.log(data.toString())
+        })
+      }
+      </script>
+  </head>
+  <body class="ica-body">
+    <h1>Automated ICA</h1>
+
+    <div id="failed-submit-dialog" title="Answer Incomplete">
+      This task has not been filled out in full. Please mark off each step of the task before moving on. Otherwise, please be sure to return to this task to finish its assessment before the end of the session.
+    </div>
+    {% if required_finished %}
+    <div id="required-finished-dialog" title="Requirements Finished">
+      You have finished all required sections for this assessment. You can close the browser window at any time, or continue assessing additional tasks.
+    </div>
+    {% endif %}
+
+    {% if technician %}
+    <div class="technician-header">
+      Technician: {{technician}}
+    </div>
+    {% endif %}
+
+    <div class="question">
+      {% if over_header %}
+        <p id="over-header">{{over_header}}</p>
+      {% endif %}
+
+      <form action="{% url 'ica:submit_in_situ_response' %}" method="post" autocomplete="off" class="ica-form">
+        {% csrf_token %}
+        <table>
+          <tr>
+            <th></th>
+            <th>Yes</th>
+            <th>No</th>
+            <th>N/A</th>
+          </tr>
+        {% for response_answer in response_answers %}
+          {% if response_answer.response_label != "Notes" %}
+          <tr class="radio-tr">
+            <td>{% autoescape off %}{{response_answer.response_label}}{% endautoescape %}</td>
+            {% if response_answer.given_response %}
+            <td><input type="radio" name="answer-{{response_answer.pk}}" value="Yes" {% if not enable_given_responses %} disabled {% endif %} {% if response_answer.given_response == 'Yes' %}checked {% endif %}/></td>
+            <td><input type="radio" name="answer-{{response_answer.pk}}" value="No" {% if not enable_given_responses %} disabled {% endif %} {% if response_answer.given_response == 'No' %}checked {% endif %}/></td>
+            <td><input type="radio" name="answer-{{response_answer.pk}}" value="N/A" {% if not enable_given_responses %} disabled {% endif %} {% if response_answer.given_response == 'N/A' %}checked {% endif %}/></td>
+            {% else %}
+            <td><input type="radio" name="answer-{{response_answer.pk}}" value="Yes" /></td>
+            <td><input type="radio" name="answer-{{response_answer.pk}}" value="No" /></td>
+            <td><input type="radio" name="answer-{{response_answer.pk}}" value="N/A" /></td>
+            {% endif %}
+          </tr>
+          {% else %}
+          </table>
+          <div class="notes-div">
+            <p>Notes</p>
+            <textarea name="answer-{{response_answer.pk}}" rows="10" cols="30" class="answer" >{{response_answer.given_response}}</textarea>
+          </div>
+          {% endif %}
+        {% endfor %}
+
+        <input type="hidden" value="{{question_response_pk}}" name="question_response_pk" />
+        <input type="submit" value="Submit Answer" />
+
+      </form>
+    </div>
+    <select id='question_select'>
+      {% for question in question_dicts %}
+        {% if question.pk == question_response_pk %}
+          <option value="{{question.pk}}" selected>{{question.display|safe}}</option>
+          <script>
+            var select_initial_index = {{forloop.counter0}};
+          </script>
+        {% else %}
+          <option value="{{question.pk}}">{{question.display|safe}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  </body>
+</html>

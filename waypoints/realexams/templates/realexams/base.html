@@ -1,0 +1,25 @@
+<html>
+  <head>
+    {% load static %}
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+      <meta charset="UTF-8">
+      <title>Assessments</title>
+      <link rel="stylesheet" href="{% static 'realexams/style.css' %}">
+      {% block headscript %}{% endblock %}
+  </head>
+  <body>
+    <div class="top-bar">
+      {% if user.is_authenticated %}
+      <p>Welcome, {{ user.name }}. <a href="{% url 'logout' %}">Logout?</a></p>
+      {% else %}
+      <p>Welcome. <a href="{% url 'login' %}">Login?</a></p>
+      {% endif %}
+      {% block return %}{% endblock %}
+    </div>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>

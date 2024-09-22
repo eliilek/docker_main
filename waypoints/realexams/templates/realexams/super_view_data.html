@@ -1,0 +1,26 @@
+{% extends "realexams/back_base.html" %}
+
+{% block content %}
+  <div class='columns-select'>
+    <div class='column'>
+      <h2>Test View</h2>
+      {% if tests %}
+        {% for test in tests %}
+          <a href="{% url 'realexams:view_test_data' test.pk %}" class="button">{{test.name}}</a>
+        {% endfor %}
+      {% else %}
+        <p>No tests available.</p>
+      {% endif %}
+    </div>
+    <div class='column'>
+      <h2>Student View</h2>
+      {% if students %}
+        {% for student in students %}
+          <a href="{% url 'realexams:view_student_data' student.pk %}" class="button">Student {{student.name}}</a>
+        {% endfor %}
+      {% else %}
+        <p>No students available.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

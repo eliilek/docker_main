@@ -1,0 +1,29 @@
+{% extends "safmeds/back_base.html" %}
+
+{% block headscript %}
+{% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'cards/style.css' %}" />
+  <script src="{% static 'cards/download_date.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div id="Date Inputs">
+  <label for="start">Start Date:</label>
+  <input type="date" id="start" name="start" value="2019-01-02">
+  <label for="end">End Date:</label>
+  <input type="date" id="end" name="end">
+</div>
+<div id="select-participant">
+  <h1>Select Data Type</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    {% if deck_type %}
+    <a href="{% url 'safmeds:download_timings_deck' student %}" class="button horiz-button">Download Timing Data</a>
+    <a href="{% url 'safmeds:download_responses_deck' student %}" class="button horiz-button">Download Response Data</a>
+    {% else %}
+    <a href="{% url 'safmeds:download_timings' student %}" class="button horiz-button">Download Timing Data</a>
+    <a href="{% url 'safmeds:download_responses' student %}" class="button horiz-button">Download Response Data</a>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "safmeds/back_base.html" %}
+
+{% block headscript %}
+{% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'cards/style.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div id="select-participant">
+  <h1>Select a Deck</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    {% if participants %}
+      {% for deck in participants %}
+      {% if next %}
+      <a href="{% url next actual_deck_id deck.id %}" class="button horiz-button">Student {{deck.name}}</a>
+      {% else %}
+      <a href="{% url 'safmeds:practice_selection' deck.id %}" class="button horiz-button">{{ deck.name }}</a>
+      {% endif %}
+
+      {% endfor %}
+    {% else %}
+      No decks are available.
+    {% endif %}
+  </div>
+  </div>
+
+{% endblock %}

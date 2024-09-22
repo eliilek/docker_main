@@ -1,0 +1,26 @@
+{% extends "thesis_readiness/back_base.html" %}
+
+{% block content %}
+  <div class='columns-select'>
+    <div class='column'>
+      <h2>Assessment View</h2>
+      {% if assessments %}
+        {% for assessment in assessments %}
+          <a href="{% url 'thesis_readiness:view_assessment_data' assessment.pk %}" class="button">{{assessment.name}}</a>
+        {% endfor %}
+      {% else %}
+        <p>No assessments available.</p>
+      {% endif %}
+    </div>
+    <div class='column'>
+      <h2>Student View</h2>
+      {% if students %}
+        {% for student in students %}
+          <a href="{% url 'thesis_readiness:view_student_data' student.pk %}" class="button">Student {{student.name}}</a>
+        {% endfor %}
+      {% else %}
+        <p>No students available.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

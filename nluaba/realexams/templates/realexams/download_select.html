@@ -1,0 +1,22 @@
+{% extends "realexams/back_base.html" %}
+
+{% block headscript %}
+{% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'realexams/style.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div id="select-participant">
+  <h1>Select a Participant</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    {% if participants %}
+      {% for user in participants %}
+      <a href="{% url 'realexams:download_student' user.pk %}" class="button horiz-button">{{user.name}}</a>
+      {% endfor %}
+    {% else %}
+      No users are available.
+    {% endif %}
+  </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+Docker Learning:
+	Docker works, multiple containers for different apps works, routing correctly requires correct launch commands (gunicorn/daphne)
+	Next steps - learn how to create/map subdomains so that nginx can correctly route waypoints.eli.com and kyo.eli.com or whatever without needing to fuck with ports
+
+Git is fucked, figure out how to delete submodules/sub-gits and make it all one thing. I could give a fuck about the history.
+
+Sort of done? - Link parsing for images
+DONE - Staff accounts should see the manager view, see/manage games they're allowed on
+DONE - After 50 trials, Kio has most points, new rule applies to him. After 50, Traci has higher than Albert, new rule should apply to Traci because she has highest who hasn't already triggered. Need some kind of condition on player/seat number. Checkbox, rule modification only applies once per player.
+Nah - Git ignore pipfile?
+
+Wait on rules based on point differential
+
+2024 Updates:
+	Automatic condition change based on participants' previous X cycles (e.g., 80% of the previous 20 cycles were all participants choosing option A)
+		Currently block has a set of BlockEndRule objects that check the value of a specific type of point.
+		If we need specific conditions/points/choices, create a new type of rule, have block check each of it's sets of rules
+			4 hours
+		->If just looking for "stable pattern", make that a boolean option on the block
+			Negligible time
+		Also wants to be able to trigger based on which player had the most points for 80% of last 20 cycles
+			Add as option on BlockEndRule, negligible time
+
+	Print the duration of each cycle (the time between the first participant's choice and the last participant's choice)
+		Negligible time
+
+	Ability to go into different conditions based on Points at end of previous
+		Broad Restructuring option - allow BlockEndRule to point to a specific next block, return ID instead of just T/F
+		create new type of blockendrule that points to a next block and returns {points:block_id} or False if condition unmet. Would need Point, optional seat #, maybe min/max cycles. Game checks points of all same-ordered blocks, next block is block ID of max. If all False, default into current blockendrule structure.
+			5 hours
+		Option 1, after condition A, you go into B1 B2 or B3 depending on who has the most points, then no matter what you go into condition C afterwards.
+			Give blocks same ordering #, add a field to the blockgameordering indicating which seat # has the most of a linked Point type, check manually
+				3 hours
+		Option 2, after condition A you go into B1 B2 or B3 depending on who has the most points, and then at the end of condition B you go into C1 C2 or C3 depending on who has the most points at that time.
+			Functions same as Option 1
+		Option 3, after condition A you go into B1 B2 or B3 depending on who has the most points, and that dictates which condition you go into next (B1 leads to C1, B2 leads to C2, B3 leads to C3)
+			Option 1 solution plus give blocks a next block option that will essentially staple 2 blocks together before returning to the game's ordering
+				4 hours
+		Option 4, participants will all go through B1, B2, and B3 eventually, and the order depends on who had the most points at the end of condition A (P1 had the most points so they go into B1 first, afterwards they can go into B2 or B3 depending on who has the most points between P2 and P3, but they can't go through B1 again)
+			Game needs to track blocks it's finished, blocks need to have a "repeatable" option. Create blockgameordering with same # for N options (e.g. A, B1 B2 B3, B1 B2 B3, B1 B2 B3)
+				3 hours
+		Option 5, conditions are additive. This one needs a little more explanation. Using your example where players can give 5 points to themselves or 10 points to another player in condition A. At the end of condition A, the player with the most points (P1) can give 15 points to another or 5 to themself, P2 and P3 are unchanged (call this condition B). At the end of condition B, if P1 still has the most points it becomes 5-self or 20-other and P2-P3 don't change. If P2 has the most points at the end of condition B, P1 stays at 5-self 15-other, P2 gets the options of 5-self 15-other, P3 stays at 5-self 10-other. The tree of possibilities for condition C expands depending on which condition B they were in.
+			Fundamentally overhaul the way games and conditions are tracked. Create some system of soft reference, maybe condition has a "selected player" the special rules apply to, maybe the game can sort players by points and create a mapping where R2 refers to the player with the 2nd most points and is mapped to P1-3.
+			Rules might need the ability to persist across conditions.
+			14 hours
+
+	Admin including time spent today
+		2 hours
+
+Hours:
+	8/22 - .5 hours
+	9/12 - .25 hours
+
+Make img sizing dynamic, figure out how to deal with potential 9 players
+Maybe come up with either a game health check or an overview given the complexity involved
+	Leave it is a viable option
+	Once they've run this round, have more experience with program/data, better idea later
+Since blocks track their own elapsed cycles, this will break if 2 games ever run at once w/same blocks
+	Maybe we don't care, fixable by making through class linking block and game to track cycles.
+In different condition, control who can send messages to who.
+Test for up to 3 players, 4 response options - works, but should probably make the tables into flexboxes
+Make player name vs P1 P2 optional if not too hard
+
+
+17. Is there a way to end a ‘block’ based on a percentage of APs produced over X trials (e.g., at 80% of the last 10 cycles)? This will be an important thing to have and automate if we can.

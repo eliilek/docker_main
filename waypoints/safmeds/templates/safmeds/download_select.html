@@ -1,0 +1,32 @@
+{% extends "safmeds/back_base.html" %}
+
+{% block headscript %}
+{% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'cards/style.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div id="select-participant">
+  {% if deck_download %}
+  <h1>Select a Deck</h1>
+  {% else %}
+  <h1>Select a Participant</h1>
+  {% endif %}
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    {% if participants %}
+      {% for user in participants %}
+      {% if password_reset %}
+      <a href="{% url 'safmeds:reset_password' user.pk %}" onclick="return confirm('Are you sure you want to reset the password for {{user.name}}?')" class="button horiz-button">Student {{user.name}}</a>
+      {% elif deck_download %}
+      <a href="{% url 'safmeds:download_deck_type_select' user.pk %}" class="button horiz-button">{{user.name}}</a>
+      {% else %}
+      <a href="{% url 'safmeds:download_type_select' user.pk %}" class="button horiz-button">Student {{user.name}}</a>
+      {% endif %}
+      {% endfor %}
+    {% else %}
+      No users are available.
+    {% endif %}
+  </div>
+  </div>
+
+{% endblock %}

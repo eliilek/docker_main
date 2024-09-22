@@ -1,0 +1,13 @@
+{% extends 'exams/back_base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div id="select-participant">
+      <h1>{{test.name}}</h1>
+      <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+        <a href="{% url 'exams:take_test' test.id %}" class="button horiz-button">Take Test</a>
+        <a href="{% url 'exams:view_test_data' test.id %}" class="button horiz-button">View Results</a>
+      </div>
+  </div>
+{% endblock %}

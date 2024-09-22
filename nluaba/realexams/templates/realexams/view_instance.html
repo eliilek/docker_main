@@ -1,0 +1,130 @@
+{% extends 'realexams/back_base.html' %}
+
+{% load static %}
+
+{% block headscript %}
+{% csrf_token %}
+<script>
+  var payload = {};
+  var score_payload = {};
+  var changes = false;
+  var score_changes = false;
+  $(document).ready(function(e){
+    $('#feedback_button').click(function(){
+      $('.feedback-area').each(function(){
+        if($(this).val() != $(this).data('initial-feedback')){
+          payload[$(this).data('response-pk')] = $(this).val();
+          $(this).data('initial-feedback', $(this).val());
+          changes = true;
+        };
+      });
+      $('.score-input').each(function(){
+        if($(this).val() != $(this).data('initial-score')){
+          score_payload[$(this).data('response-pk')] = $(this).val();
+          $(this).data('initial-score', $(this).val());
+          score_changes = true;
+        }
+      });
+      if(changes == false && score_changes == false){
+        alert("It doesn't look like anything was changed.");
+      }
+      if(changes){
+        $.post("{% url 'realexams:feedback' %}", payload, function(data){
+            alert("Feedback updated successfully.");
+          });
+        payload = {};
+        changes = false;
+      }
+      if(score_changes){
+        $.post("{% url 'realexams:score' %}", score_payload, function(data){
+          alert("Score updated successfully.");
+        });
+        score_payload = {};
+        score_changes = false;
+      }
+    });
+  });
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+  function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+  </script>
+{% endblock %}
+
+{% block content %}
+  <table id="practice">
+    <tr>
+      <th>Objectives</th>
+      <th>Question Text</th>
+      {% if user.is_superuser or released %}
+      <th>Correct Answer</th>
+      {% endif %}
+      <th>Given Answer</th>
+      {% if user.is_superuser or released %}
+      <th>Incorrect Answer 1</th>
+      <th>Incorrect Answer 2</th>
+      <th>Incorrect Answer 3</th>
+      {% endif %}
+      {% if user.is_superuser %}
+      <th><button class='mark-button' id='feedback_button'>Update Feedback/Scores</button></th>
+      <th>Score</th>
+      {% elif released %}
+      <th>Feedback</th>
+      <th>Score</th>
+      {% endif %}
+    </tr>
+    {% for response in responses %}
+      <tr>
+        <td>{{response.objective_str}}</td>
+        {% if response.question_image_url %}
+        <td>{{response.question}}<br><a href="{{response.question_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.question}}</td>
+        {% endif %}
+
+      {% if user.is_superuser or released %}
+        {% if response.correct_answer_image_url %}
+        <td>{{response.correct_answer}}<br><a href="{{response.correct_answer_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.correct_answer}}</td>
+        {% endif %}
+      {% endif %}
+        <td>{{response.given_answer}}</td>
+      {% if user.is_superuser or released %}
+        {% if response.incorrect_answer_1_image_url %}
+        <td>{{response.incorrect_answer_1}}<br><a href="{{response.incorrect_answer_1_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.incorrect_answer_1}}</td>
+        {% endif %}
+
+        {% if response.incorrect_answer_2_image_url %}
+        <td>{{response.incorrect_answer_2}}<br><a href="{{response.incorrect_answer_2_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.incorrect_answer_2}}</td>
+        {% endif %}
+        
+        {% if response.incorrect_answer_3_image_url %}
+        <td>{{response.incorrect_answer_3}}<br><a href="{{response.incorrect_answer_3_image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.incorrect_answer_3}}</td>
+        {% endif %}
+      {% endif %}
+        {% if user.is_superuser %}
+        <td><textarea class="feedback-area" rows="10" cols="30" data-initial-feedback="{{response.feedback}}" data-response-pk="{{response.pk}}">{{response.feedback}}</textarea></td>
+        <td><input class="score-input" type='text' data-initial-score="{{response.score}}" data-response-pk="{{response.pk}}" value="{{response.score}}">/{{response.max_score}}</td>
+        {% elif released %}
+        <td>{{response.feedback}}</td>
+        <td>{{response.score}}/{{response.max_score}}</td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

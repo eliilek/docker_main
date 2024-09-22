@@ -1,0 +1,28 @@
+{% extends "exams/back_base.html" %}
+
+{% block headscript %}
+{% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'exams/style.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div id="select-participant">
+{% if students %}
+  <h1>Select a Participant</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+  {% for user in students %}
+      <a href="{% url 'exams:download_maintenance_student' user.pk %}" class="button horiz-button">{{user.name}}</a>
+      {% endfor %}
+    </div></div>
+{% else %}
+  <h1>Select Courses</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    <form action="{% url 'exams:download_maintenance_course' %}" method="post">
+        {% csrf_token %}
+        {% for course in courses %}
+        <input type="checkbox" id="checkbox-{{forloop.counter}}" name="checkbox-{{forloop.counter}}" value="{{course.pk}}">{{course.name}}
+        {% endfor %}
+        <input type="submit">
+      </form>
+{% endif %}
+{% endblock %}

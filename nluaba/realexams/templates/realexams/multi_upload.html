@@ -1,0 +1,16 @@
+{% extends "realexams/back_base.html" %}
+
+{% block content %}
+  <p>Copy/Paste from excel. Questions will be added to the test in the given order.</p>
+  <br>
+  <form action="{% url 'realexams:multi_upload_report' %}" method="post" id="form">
+    {% csrf_token %}
+    Test Name: <input type="text" name="name" /><br />
+    Time Limit (Can accept HH:MM:SS or a number of seconds. XX:XX will break if over 1 hour.): <input type="text" name="time_limit" />
+    Automatically Release Feedback: <input type="checkbox" name="autorelease" />
+    <input type="submit" value="Submit"/>
+  </form>
+  <p>
+    Enter your questions here:
+    </p> <textarea name="questions" form="form" style="width:650px; height:400px;"></textarea>
+{% endblock %}

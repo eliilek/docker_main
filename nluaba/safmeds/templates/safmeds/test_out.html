@@ -1,0 +1,96 @@
+<html>
+  <head>
+    {% load static %}
+    {% csrf_token %}
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+      <meta charset="UTF-8">
+      <title>SAFMEDS</title>
+      <style>
+        body{
+          display:flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-direction: column;
+        }
+
+        #card{
+          border: 2px solid black;
+          padding: 20px;
+          width: 30%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+        }
+
+        table{
+  border-collapse: separate;
+  width: 70%;
+}
+
+td{
+  padding: 4px 0;
+  border-spacing: 40px 0;
+  border-left: 2px solid white;
+  border-right: 2px solid #BBB;
+}
+td:last-child{
+  border-right: none;
+  text-align: center;
+}
+
+th{
+  border-spacing: 20px 0;
+  border-left: 2px solid white;
+  border-right: 2px solid #BBB;
+}
+
+th:last-child{
+  border-right: none;
+}
+
+tr:nth-child(even){
+  background-color: #DDD;
+}
+      </style>
+      <script>
+        var cards = {{ cards|safe }};
+        var deck = {{deck}};
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+      function report(payload, success){
+        $.post("{% url 'safmeds:report' %}", payload, function(data){
+          $(window).off("beforeunload");
+          success();
+        })
+      }
+      </script>
+    <script src="{% static 'cards/test_out.js' %}"></script>
+  </head>
+  <body>
+    <div id="card">
+      <p id="definition"></p>
+      <input type="text" class="real_input" />
+      <button id="next">Next</button>
+    </div>
+    <table id="typos">
+      <tr>
+        <th>Response Provided</th>
+        <th>Correct Typos</th>
+      </tr>
+    </table>
+    <button id="finish">Submit Corrections</button>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+{% extends 'thesis_readiness/back_base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <h1>{{assessment}}</h1>
+  <br />
+  <table id="practice">
+    <tr>
+      {% if user.is_superuser %}
+      <th>Student</th>
+      {% endif %}
+      <th>Assessment Started</th>
+      {% if user.is_superuser %}
+      <th>Score</th>
+      <th>Total Score</th>
+      {% endif %}
+      <th>View Questions</th>
+      {% if user.is_superuser %}
+      <th>Delete Assessment Instance</th>
+      {% endif %}
+    </tr>
+    {% for instance in instances %}
+      <tr>
+        {% if user.is_superuser %}
+        <td>{{instance.student}}</td>
+        {% endif %}
+        <td>{{instance.created|date:"g:i:s M j, Y"}}</td>
+        {% if user.is_superuser %}
+        <td>{{instance.score}}</td>
+        <td>{{instance.total_score}}</td>
+        {% endif %}
+        <td><a href="{% url 'thesis_readiness:view_instance_data' instance.pk %}">View</a></td>
+        {% if user.is_superuser %}
+        <td><a class="button" onclick="return confirm('Are you sure you want to delete this instance?')" href="{% url 'thesis_readiness:delete_assessment_instance' instance.pk 'assessment' %}">Delete</a></td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+  <div class="pagination">
+    <span class="step-links">
+        {% if instances.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ instances.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ instances.number }} of {{ instances.paginator.num_pages }}.
+        </span>
+
+        {% if instances.has_next %}
+            <a href="?page={{ instances.next_page_number }}">Next</a>
+            <a href="?page={{ instances.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+    </span>
+  </div>
+{% endblock %}

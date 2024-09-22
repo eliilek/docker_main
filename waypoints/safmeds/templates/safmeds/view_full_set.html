@@ -1,0 +1,16 @@
+{% extends "safmeds/back_base.html" %}
+
+{% block content %}
+  <table id="full-set">
+      <tr>
+        <th>SEE</th>
+        <th>TYPE</th>
+      </tr>
+      {% for card in cards %}
+      <tr>
+        <td>{{card.see}}</td>
+        <td>{{card.type}}</td>
+      </tr>
+      {% endfor %}
+  </table>
+{% endblock %}

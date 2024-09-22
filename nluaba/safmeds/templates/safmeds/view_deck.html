@@ -1,0 +1,48 @@
+{% extends "safmeds/back_base.html" %}
+
+{% block headscript %}
+  <script>
+    function refresh_card(){
+      $("#definition").html(cards[index]['definition']);
+      flipped = false;
+    }
+
+    var flipped = false;
+    var index = 0;
+    var cards = {{ cards|safe }};
+    $(document).ready(function(){
+      $("#back").click(function(){
+        if (index > 0){
+          index -= 1;
+          refresh_card();
+        }
+      });
+      $("#next").click(function(){
+        if (index < cards.length - 1){
+          index += 1;
+          refresh_card();
+        };
+      });
+      $("#flip").click(function(){
+        if (flipped){
+          refresh_card();
+        } else {
+          flipped = true;
+          $("#definition").html(cards[index]['term']);
+        }
+      });
+      refresh_card();
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+  <div id="card">
+    <p id="definition"></p>
+    <div id="button_container">
+      <button id="back">Last Card</button>
+      <button id="flip">Flip Card</button>
+      <button id="next">Next Card</button>
+    </div>
+  </div>
+{% endblock %}

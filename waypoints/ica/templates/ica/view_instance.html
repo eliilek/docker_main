@@ -1,0 +1,98 @@
+{% extends 'ica/back_base.html' %}
+
+{% load static %}
+
+{% block headscript %}
+{% csrf_token %}
+<script>
+  var score_payload = {};
+  var score_changes = false;
+  $(document).ready(function(e){
+    $('#feedback_button').click(function(){
+      $('.score-input').each(function(){
+        if($(this).val() != $(this).data('initial-score')){
+          score_payload[$(this).data('response-pk')] = $(this).val();
+          $(this).data('initial-score', $(this).val());
+          score_changes = true;
+        }
+      });
+      if(score_changes == false){
+        alert("It doesn't look like anything was changed.");
+      }
+      else {
+        $.post("{% url 'ica:score' %}", score_payload, function(data){
+          alert("Score updated successfully.");
+        });
+        score_payload = {};
+        score_changes = false;
+      }
+    });
+  });
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+  function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+  </script>
+{% endblock %}
+
+{% block content %}
+  <table id="practice">
+    <tr>
+      <th>Task</th>
+      <th>Question</th>
+      <th></th>
+      <th></th>
+      <th><button class='mark-button' id='feedback_button'>Update Scores</button></th>
+    </tr>
+    {% for response in responses %}
+      <tr class="header-row">
+        <td>{{response.task}}</td>
+        <td>{{response.question_label|safe}}</td>
+        {% if response.question_type == "MC" %}
+        <td>Given Response</td>
+        <td>Correct Response</td>
+        {% elif response.question_type == "SA" %}
+        <td>Given Response</td>
+        <td></td>
+        {% else %}
+        <td>{{response.left_label}}</td>
+        <td>{{response.right_label}}</td>
+        {% endif %}
+        <td><input class="score-input" type='text' data-initial-score="{{response.points}}" data-response-pk="{{response.question_response_pk}}" value="{{response.points}}"></td>
+      </tr>
+      {% for answer in response.answers %}
+        <tr>
+          <td>{{answer.answered_timestamp|date:"g:i:s M j, Y"}}</td>
+          <td>{{answer.response_label|safe}}</td>
+          {% if response.question_type == "MC" %}
+          <td>{{answer.given_response}}</td>
+          <td>{{answer.correct_response}}</td>
+          {% elif response.question_type == "SA" %}
+          <td>{{answer.given_response}}</td>
+          <td></td>
+          {% else %}
+          <td>{{answer.left_response}}</td>
+          <td>{{answer.right_response}}</td>
+          {% endif %}
+          <td></td>
+        </tr>
+      {% endfor %}
+      <tr class="spacer-row">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    {% endfor %}
+
+  </table>
+{% endblock %}

@@ -1,0 +1,14 @@
+<html>
+  <head>
+    {% load static %}
+    <title>Exams</title>
+    <link rel="stylesheet" href="{% static 'exams/style.css' %}">
+  </head>
+  <body>
+    <div id="content">
+      {{instructions|safe|linebreaks}}
+    </div>
+    <br><br>
+    <a href="{% url 'exams:take_test' test_id %}" class="button">Begin Test</a>
+  </body>
+</html>

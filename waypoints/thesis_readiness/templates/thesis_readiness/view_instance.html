@@ -1,0 +1,100 @@
+{% extends 'thesis_readiness/back_base.html' %}
+
+{% load static %}
+
+{% block headscript %}
+{% csrf_token %}
+<script>
+  var payload = {};
+  var score_payload = {};
+  var changes = false;
+  var score_changes = false;
+  $(document).ready(function(e){
+    $('#feedback_button').click(function(){
+      $('.feedback-area').each(function(){
+        if($(this).val() != ""){
+          payload[$(this).data('response-pk')] = $(this).val();
+          changes = true;
+        };
+      });
+      $('.score-input').each(function(){
+        if($(this).val() != $(this).data('initial-score')){
+          score_payload[$(this).data('response-pk')] = $(this).val();
+          $(this).data('initial-score', $(this).val());
+          score_changes = true;
+        }
+      });
+      if(score_changes == false && changes == false){
+        alert("It doesn't look like anything was changed.");
+      } 
+      if(changes){
+        $.post("{% url 'thesis_readiness:key' %}", payload, function(data){
+            alert("Key updated successfully.");
+          });
+        payload = {};
+        changes = false;
+      }
+      if(score_changes){
+        $.post("{% url 'thesis_readiness:score' %}", score_payload, function(data){
+          alert("Score updated successfully.");
+        });
+        score_payload = {};
+        score_changes = false;
+      }
+    });
+  });
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+  function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+  </script>
+{% endblock %}
+
+{% block content %}
+  <table id="practice">
+    <tr>
+      <th>Objectives</th>
+      <th>Question Text</th>
+      <th>Given Answer</th>
+      <th>Key</th>
+      <th>Correct Answer(s)</th>
+      <th>Incorrect Answer(s)</th>
+      <th><button class='mark-button' id='feedback_button'>Update Scores</button></th>
+    </tr>
+    {% for response in responses %}
+      <tr>
+        <td>{{response.objective_str}}</td>
+        {% if response.image_url %}
+        <td>{{response.question}}<br><a href="{{response.image_url}}">Image</a></td>
+        {% else %}
+        <td>{{response.question}}</td>
+        {% endif %}
+        <td>{{response.given_answer}}</td>
+        {% if response.key != "" %}
+        <td>{{response.key}}</td>
+        {% else %}
+        <td><textarea class="feedback-area" rows="10" cols="30" data-response-pk="{{response.pk}}"></textarea></td>
+        {% endif %}
+        {% if response.correct_string %}
+        <td>{{response.correct_string|safe}}</td>
+        {% else %}
+        <td></td>
+        {% endif %}
+        {% if response.incorrect_string %}
+        <td>{{response.incorrect_string|safe}}</td>
+        {% else %}
+        <td></td>
+        {% endif %}
+		<td><input class="score-input" type='text' data-initial-score="{{response.score}}" data-response-pk="{{response.pk}}" value="{{response.score}}">/{{response.max_score}}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

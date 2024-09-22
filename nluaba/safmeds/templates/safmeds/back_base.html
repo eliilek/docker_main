@@ -1,0 +1,8 @@
+{% extends "safmeds/base.html" %}
+
+{% block return %}
+  <p>
+    <a href="{% url 'safmeds:decks' %}">Return to Deck Selection?</a>
+    <a href="{% url 'splash' %}">Select a different app?</a>
+  </p>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "thesis_readiness/back_base.html" %}
+
+{% block content %}
+  <p>Copy/Paste from excel. Questions will be added to the test in the given order.</p>
+  <br>
+  <form action="{% url 'thesis_readiness:multi_upload_report' %}" method="post" id="form">
+    {% csrf_token %}
+    Assessment Name: <input type="text" name="name" /><br />
+    <input type="submit" value="Submit"/>
+  </form>
+    <div>
+  <p>
+    Enter your questions here:
+    </p> <textarea name="questions" form="form" style="width:650px; height:200px;"></textarea>
+    <p>
+    Enter your instructions here:
+    </p> <textarea name="instructions" form="form" style="width:650px; height:200px;"></textarea>
+    <p>
+    Enter your part-specific instructions here:
+    </p> <textarea name="part-instructions" form="form" style="width:650px; height:200px;"></textarea>
+  </div>
+{% endblock %}

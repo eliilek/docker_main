@@ -1,0 +1,15 @@
+{% extends "thesis_readiness/back_base.html" %}
+
+{% block content %}
+  <p>Copy/Paste from excel.</p>
+  <br>
+  <form action="{% url 'thesis_readiness:multi_upload_report_part_2' %}" method="post" id="form">
+    {% csrf_token %}
+    <input type="submit" value="Submit"/>
+  </form>
+    <div>
+  <p>
+    Enter your questions here:
+    </p> <textarea name="questions" form="form" style="width:650px; height:200px;"></textarea>
+  </div>
+{% endblock %}

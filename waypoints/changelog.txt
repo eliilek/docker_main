@@ -1,0 +1,11 @@
+3/25/20
+	Added function to save a given answer if the student navigates to another question rather than hitting submit.
+		This won't work if the browser has javascript disabled, so it's possible for a student to not have their answer saved when using the last question and next question links. Very unlikely, but I would encourage them to hit submit and have this as a backup just in case.
+	Newly created users will redirect to the splash page instead of the safmeds app
+
+3/28/20
+	Added student download to the realexams app
+		I copied the formatting from the exams app, but please check and let me know if you'd like more/less/different columns in there. Especially with short answer questions as a possibility.
+	Added links to images to test instance view, downloads
+		Excel won't format them as hyperlinks unless the link gets a cell all to itself, we could try to rearrange and add extra columns, or I could turn the whole question text into a link to the image. Or leave as is
+		

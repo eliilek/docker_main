@@ -1,0 +1,22 @@
+{% extends "ica/back_base.html" %}
+
+{% load static %}
+
+{% block content %}
+  {% if instances %}
+  <table>
+    <tr>
+      <th>Technician</th>
+      <th>Begin</th>
+    </tr>
+    {% for instance in instances %}
+    <tr>
+      <td>{{instance.technician}}</td>
+      <td><a class="button" href="{% url 'ica:begin_in_situ' instance.pk %}">Begin</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  There are no instances assigned to you. Something has gone wrong.
+  {% endif %}
+{% endblock %}

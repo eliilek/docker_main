@@ -1,0 +1,19 @@
+{% extends "safmeds/back_base.html" %}
+
+{% block headscript %}
+  <script>
+
+  </script>
+{% endblock %}
+
+{% block content %}
+  <p>Copy/Paste from excel, or enter a term, TWO spaces, the definition, and then a newline via the enter key.</p>
+  <br>
+  <form action="{% url 'safmeds:multi_upload_report' %}" method="post" id="form">
+    {% csrf_token %}
+    Deck Name: <input type="text" name="name" /><br>
+    Test-Out Deck: <input type="checkbox" name="testout" />
+    <input type="submit" value="Submit"/>
+  </form>
+  Enter your terms/definitions here: <textarea name="cards" form="form"></textarea>
+{% endblock %}
