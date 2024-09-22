@@ -221,12 +221,12 @@ services:
 
 secrets:
     S3_ACCESS:
-        external: true
+        environment: S3_ACCESS
     S3_SECRET:
-        external: true
+        environment: S3_SECRET
     CLOUDINARY_URL:
-        external: true
-
+        environment: CLOUDINARY_URL
+        
 volumes:
     static_volume: {}
     kyo_postgres_data: {}
