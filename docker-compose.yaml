@@ -39,16 +39,15 @@ services:
             #CELERY_RESULT_BACKEND: "redis://redis:6379/0"
             REDIS_URL: 'redis://redis:6379'
             DJANGO_DB: postgresql
-            POSTGRES_HOST: waypoints-db
-            POSTGRES_NAME: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            DATABASE_URL: 'postgres://postgres:postgres@kyo-db/postgres'
-            POSTGRES_PORT: 5432
+            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
+            POSTGRES_NAME: kyo-db
+            POSTGRES_USER: doadmin
+            POSTGRES_PORT: 25060
         secrets:
             - S3_ACCESS
             - S3_SECRET
             - CLOUDINARY_URL
+            - POSTGRES_PASSWORD
     waypoints-server:
         restart: unless-stopped
         build:
@@ -63,16 +62,15 @@ services:
             DEBUG: "True"
             REDIS_URL: 'redis://redis:6379'
             DJANGO_DB: postgresql
-            POSTGRES_HOST: waypoints-db
-            POSTGRES_NAME: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            DATABASE_URL: 'postgres://postgres:postgres@waypoints-db/postgres'
-            POSTGRES_PORT: 5433
+            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
+            POSTGRES_NAME: waypoints-db
+            POSTGRES_USER: doadmin
+            POSTGRES_PORT: 25060
         secrets:
             - S3_ACCESS
             - S3_SECRET
             - CLOUDINARY_URL
+            - POSTGRES_PASSWORD
     nluaba-server:
         restart: unless-stopped
         build:
@@ -87,16 +85,15 @@ services:
             DEBUG: "True"
             REDIS_URL: 'redis://redis:6379'
             DJANGO_DB: postgresql
-            POSTGRES_HOST: nluaba-db
-            POSTGRES_NAME: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            DATABASE_URL: 'postgres://postgres:postgres@nluaba-db/postgres'
-            POSTGRES_PORT: 5434
+            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
+            POSTGRES_NAME: nluaba-db
+            POSTGRES_USER: doadmin
+            POSTGRES_PORT: 25060
         secrets:
             - S3_ACCESS
             - S3_SECRET
             - CLOUDINARY_URL
+            - POSTGRES_PASSWORD
     kyo-worker:
         restart: unless-stopped
         build:
@@ -111,12 +108,10 @@ services:
             #CELERY_RESULT_BACKEND: "redis://redis:6379/0"
             REDIS_URL: 'redis://redis:6379'
             DJANGO_DB: postgresql
-            POSTGRES_HOST: kyo-db
-            POSTGRES_NAME: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            DATABASE_URL: 'postgres://postgres:postgres@kyo-db/postgres'
-            POSTGRES_PORT: 5432
+            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
+            POSTGRES_NAME: kyo-db
+            POSTGRES_USER: doadmin
+            POSTGRES_PORT: 25060
         depends_on:
             - kyo-server
             - redis
@@ -124,6 +119,7 @@ services:
             - S3_ACCESS
             - S3_SECRET
             - CLOUDINARY_URL
+            - POSTGRES_PASSWORD
     waypoints-worker:
         restart: unless-stopped
         build:
@@ -136,12 +132,10 @@ services:
             DEBUG: "True"
             REDIS_URL: 'redis://redis:6379'
             DJANGO_DB: postgresql
-            POSTGRES_HOST: waypoints-db
-            POSTGRES_NAME: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            DATABASE_URL: 'postgres://postgres:postgres@waypoints-db/postgres'
-            POSTGRES_PORT: 5433
+            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
+            POSTGRES_NAME: waypoints-db
+            POSTGRES_USER: doadmin
+            POSTGRES_PORT: 25060
         depends_on:
             - waypoints-server
             - redis
@@ -149,6 +143,7 @@ services:
             - S3_ACCESS
             - S3_SECRET
             - CLOUDINARY_URL
+            - POSTGRES_PASSWORD
     nluaba-worker:
         restart: unless-stopped
         build:
@@ -161,12 +156,10 @@ services:
             DEBUG: "True"
             REDIS_URL: 'redis://redis:6379'
             DJANGO_DB: postgresql
-            POSTGRES_HOST: nluaba-db
-            POSTGRES_NAME: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres            
-            DATABASE_URL: 'postgres://postgres:postgres@nluaba-db/postgres'
-            POSTGRES_PORT: 5434
+            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
+            POSTGRES_NAME: nluaba-db
+            POSTGRES_USER: doadmin
+            POSTGRES_PORT: 25060
         depends_on:
             - nluaba-server
             - redis
@@ -174,56 +167,12 @@ services:
             - S3_ACCESS
             - S3_SECRET
             - CLOUDINARY_URL
+            - POSTGRES_PASSWORD
     redis:
         restart: unless-stopped
         image: redis:7.0.5-alpine 
         expose:
             - 6379
-    kyo-db:
-        image: postgres:13.0-alpine
-        restart: unless-stopped
-        volumes:
-            - kyo_postgres_data:/var/lib/postgresql/kyo-data/
-        environment:
-            POSTGRES_DB: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-        expose:
-            - 5432
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL
-    waypoints-db:
-        image: postgres:13.0-alpine
-        restart: unless-stopped
-        volumes:
-            - waypoints_postgres_data:/var/lib/postgresql/waypoints-data/
-        environment:
-            POSTGRES_DB: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-        expose:
-            - 5433
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL
-    nluaba-db:
-        image: postgres:13.0-alpine
-        restart: unless-stopped
-        volumes:
-            - nluaba_postgres_data:/var/lib/postgresql/nluaba-data/
-        environment:
-            POSTGRES_DB: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-        expose:
-            - 5434
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL
 
 secrets:
     S3_ACCESS:
@@ -232,9 +181,8 @@ secrets:
         environment: S3_SECRET
     CLOUDINARY_URL:
         environment: CLOUDINARY_URL
+    POSTGRES_PASSWORD:
+        environment: POSTGRES_PASSWORD
 
 volumes:
     static_volume: {}
-    kyo_postgres_data: {}
-    waypoints_postgres_data: {}
-    nluaba_postgres_data: {}
