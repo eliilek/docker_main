@@ -186,5 +186,5 @@ LOGIN_URL = '/accounts'
 LOGIN_REDIRECT_URL = '/'
 
 CLOUDINARY_STORAGE = {
-    'CLOUDINARY_URL': get_secret('CLOUDINARY_URL'),
+    'CLOUDINARY_URL': get_secret('C_URL'),
 }

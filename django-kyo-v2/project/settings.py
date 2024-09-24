@@ -190,5 +190,5 @@ CHANNEL_LAYERS = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CLOUDINARY_STORAGE = {
-    'CLOUDINARY_URL': get_secret('CLOUDINARY_URL'),
+    'CLOUDINARY_URL': get_secret('C_URL'),
 }
