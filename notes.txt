@@ -2,7 +2,8 @@ Docker Learning:
 	Docker works, multiple containers for different apps works, routing correctly requires correct launch commands (gunicorn/daphne)
 	Next steps - learn how to create/map subdomains so that nginx can correctly route waypoints.eli.com and kyo.eli.com or whatever without needing to fuck with ports
 
-NGINX NOTE!!! host name is the whole string, not just subdomain. I actually want *.kleinapp.com, waypoints.kleinapp.com, etc.
+Two remaining problems - env variables don't persist so S3_ACCESS was gone when I tried to recompose
+Database dump was successful, everything is in there, django settings need to be reconfigured to actually talk to that database or create appropriate env variables
 Try to unfuck my local pipenv?
 
 Sort of done? - Link parsing for images

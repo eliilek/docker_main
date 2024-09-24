@@ -43,6 +43,7 @@ services:
             POSTGRES_NAME: postgres
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
+            DATABASE_URL: 'postgres://postgres:postgres@kyo-db/postgres'
             POSTGRES_PORT: 5432
         secrets:
             - S3_ACCESS
@@ -66,6 +67,7 @@ services:
             POSTGRES_NAME: postgres
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
+            DATABASE_URL: 'postgres://postgres:postgres@waypoints-db/postgres'
             POSTGRES_PORT: 5433
         secrets:
             - S3_ACCESS
@@ -89,6 +91,7 @@ services:
             POSTGRES_NAME: postgres
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
+            DATABASE_URL: 'postgres://postgres:postgres@nluaba-db/postgres'
             POSTGRES_PORT: 5434
         secrets:
             - S3_ACCESS
@@ -112,6 +115,7 @@ services:
             POSTGRES_NAME: postgres
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
+            DATABASE_URL: 'postgres://postgres:postgres@kyo-db/postgres'
             POSTGRES_PORT: 5432
         depends_on:
             - kyo-server
@@ -136,6 +140,7 @@ services:
             POSTGRES_NAME: postgres
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
+            DATABASE_URL: 'postgres://postgres:postgres@waypoints-db/postgres'
             POSTGRES_PORT: 5433
         depends_on:
             - waypoints-server
@@ -159,7 +164,8 @@ services:
             POSTGRES_HOST: nluaba-db
             POSTGRES_NAME: postgres
             POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
+            POSTGRES_PASSWORD: postgres            
+            DATABASE_URL: 'postgres://postgres:postgres@nluaba-db/postgres'
             POSTGRES_PORT: 5434
         depends_on:
             - nluaba-server
@@ -226,7 +232,7 @@ secrets:
         environment: S3_SECRET
     CLOUDINARY_URL:
         environment: CLOUDINARY_URL
-        
+
 volumes:
     static_volume: {}
     kyo_postgres_data: {}
