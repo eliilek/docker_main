@@ -13,7 +13,7 @@ import os
 import dj_database_url
 import django_heroku
 
-def get_secret(key, default):
+def get_secret(key, default=None):
     value = os.getenv(key, default)
     if os.path.isfile(value):
         with open(value) as f:
