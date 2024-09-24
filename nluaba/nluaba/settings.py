@@ -13,6 +13,13 @@ import os
 import dj_database_url
 import django_heroku
 
+def get_secret(key, default):
+    value = os.getenv(key, default)
+    if os.path.isfile(value):
+        with open(value) as f:
+            return f.read()
+    return value
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -135,7 +142,7 @@ DATABASES_ALL = {
         "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
         "NAME": os.environ.get("POSTGRES_NAME", "postgres"),
         "USER": os.environ.get("POSTGRES_USER", "postgres"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
+        "PASSWORD": get_secret("POSTGRES_PASSWORD", "postgres"),
         "PORT": int(os.environ.get("POSTGRES_PORT", "5432")),
     },
 }
@@ -168,8 +175,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_STORAGE_BUCKET_NAME = 'nluaba'
 AWS_S3_REGION_NAME = 'us-east-2'
-AWS_ACCESS_KEY_ID = os.environ.get('S3_ACCESS')
-AWS_SECRET_ACCESS_KEY = os.environ.get('S3_SECRET')
+AWS_ACCESS_KEY_ID = get_secret('S3_ACCESS')
+AWS_SECRET_ACCESS_KEY = get_secret('S3_SECRET')
 AWS_DEFAULT_ACL = None
 
 # Activate Django-Heroku.
@@ -177,3 +184,7 @@ django_heroku.settings(locals())
 
 LOGIN_URL = '/accounts'
 LOGIN_REDIRECT_URL = '/'
+
+CLOUDINARY_STORAGE = {
+    'CLOUDINARY_URL': get_secret('CLOUDINARY_URL'),
+}
