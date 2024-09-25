@@ -7,11 +7,10 @@ name = "pypi"
 python_version = "3.12"
 
 [packages]
-"psycopg2-binary" = "*"
 django-heroku = "*"
 gunicorn = "*"
 django-authtools = "*"
-django = "==2.2"
+django = "*"
 awscli = "*"
 cloudinary = "*"
 python-dateutil = "*"

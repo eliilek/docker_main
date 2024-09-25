@@ -4,7 +4,7 @@ import django_heroku
 
 def get_secret(key, default=None):
     value = os.getenv(key, default)
-    if os.path.isfile(value):
+    if value and os.path.isfile(value):
         with open(value) as f:
             return f.read()
     return value

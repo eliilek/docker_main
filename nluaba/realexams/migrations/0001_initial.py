@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
                 ('incorrect_answer_2', models.TextField()),
                 ('incorrect_answer_3', models.TextField()),
                 ('active', models.BooleanField(default=True)),
-                ('image', models.ForeignKey(blank=True, null=True, on_delete='SET_NULL', to='realexams.Image')),
+                ('image', models.ForeignKey(blank=True, null=True, on_delete=models.SET_NULL, to='realexams.Image')),
                 ('objectives', models.ManyToManyField(to='realexams.Objective')),
             ],
         ),

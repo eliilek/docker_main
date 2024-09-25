@@ -13,26 +13,26 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='question',
             name='correct_answer_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete='SET_NULL', related_name='correct_image', to='exams.Image'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=models.SET_NULL, related_name='correct_image', to='exams.Image'),
         ),
         migrations.AddField(
             model_name='question',
             name='incorrect_answer_1_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete='SET_NULL', related_name='incorrect_image_1', to='exams.Image'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=models.SET_NULL, related_name='incorrect_image_1', to='exams.Image'),
         ),
         migrations.AddField(
             model_name='question',
             name='incorrect_answer_2_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete='SET_NULL', related_name='incorrect_image_2', to='exams.Image'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=models.SET_NULL, related_name='incorrect_image_2', to='exams.Image'),
         ),
         migrations.AddField(
             model_name='question',
             name='incorrect_answer_3_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete='SET_NULL', related_name='incorrect_image_3', to='exams.Image'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=models.SET_NULL, related_name='incorrect_image_3', to='exams.Image'),
         ),
         migrations.AlterField(
             model_name='question',
             name='image',
-            field=models.ForeignKey(blank=True, null=True, on_delete='SET_NULL', related_name='q_image', to='exams.Image'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=models.SET_NULL, related_name='q_image', to='exams.Image'),
         ),
     ]
