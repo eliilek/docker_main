@@ -22,36 +22,6 @@ services:
             - 80:80
         volumes:
             - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-            - static_volume:/app/kyo-backend/django_static
-    kyo-server:
-        restart: unless-stopped
-        build:
-            context: .
-            dockerfile: ./docker/kyo-backend/Dockerfile
-        entrypoint: /app/docker/kyo-backend/server-entrypoint.sh
-        volumes:
-            - static_volume:/app/kyo-backend/django_static
-        expose:
-            - 8000
-        environment:
-            DEBUG: "True"
-            #CELERY_BROKER_URL: "redis://redis:6379/0"
-            #CELERY_RESULT_BACKEND: "redis://redis:6379/0"
-            REDIS_URL: 'redis://redis:6379'
-            DJANGO_DB: postgresql
-            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
-            POSTGRES_NAME: kyo-db
-            POSTGRES_USER: doadmin
-            POSTGRES_PORT: 25060
-            S3_ACCESS: /run/secrets/S3_ACCESS
-            S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL
-            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL
-            - POSTGRES_PASSWORD
     waypoints-server:
         restart: unless-stopped
         build:
@@ -101,36 +71,6 @@ services:
             S3_SECRET: /run/secrets/S3_SECRET
             C_URL: /run/secrets/CLOUDINARY_URL
             POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL
-            - POSTGRES_PASSWORD
-    kyo-worker:
-        restart: unless-stopped
-        build:
-            context: .
-            dockerfile: ./docker/kyo-backend/Dockerfile
-        entrypoint: /app/docker/kyo-backend/worker-entrypoint.sh
-        volumes:
-            - static_volume:/app/kyo-backend/django_static
-        environment:
-            DEBUG: "True"
-            #CELERY_BROKER_URL: "redis://redis:6379/0"
-            #CELERY_RESULT_BACKEND: "redis://redis:6379/0"
-            REDIS_URL: 'redis://redis:6379'
-            DJANGO_DB: postgresql
-            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
-            POSTGRES_NAME: kyo-db
-            POSTGRES_USER: doadmin
-            POSTGRES_PORT: 25060
-            S3_ACCESS: /run/secrets/S3_ACCESS
-            S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL
-            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
-        depends_on:
-            - kyo-server
-            - redis
         secrets:
             - S3_ACCESS
             - S3_SECRET

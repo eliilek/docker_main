@@ -1,10 +1,3 @@
-Docker Learning:
-	Docker works, multiple containers for different apps works, routing correctly requires correct launch commands (gunicorn/daphne)
-	Next steps - learn how to create/map subdomains so that nginx can correctly route waypoints.eli.com and kyo.eli.com or whatever without needing to fuck with ports
-
-Next step: Upgrade Django version to at least 3.2 for nluaba and waypoints, deal with everything that follows
-Try to unfuck my local pipenv?
-
 Sort of done? - Link parsing for images
 DONE - Staff accounts should see the manager view, see/manage games they're allowed on
 DONE - After 50 trials, Kio has most points, new rule applies to him. After 50, Traci has higher than Albert, new rule should apply to Traci because she has highest who hasn't already triggered. Need some kind of condition on player/seat number. Checkbox, rule modification only applies once per player.

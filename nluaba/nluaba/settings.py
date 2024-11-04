@@ -178,6 +178,7 @@ AWS_S3_REGION_NAME = 'us-east-2'
 AWS_ACCESS_KEY_ID = get_secret('S3_ACCESS')
 AWS_SECRET_ACCESS_KEY = get_secret('S3_SECRET')
 AWS_DEFAULT_ACL = None
+AWS_S3_FILE_OVERWRITE = False
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
