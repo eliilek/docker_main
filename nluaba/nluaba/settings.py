@@ -179,6 +179,9 @@ STORAGES = {
                # ... your S3 options here
                "AWS_S3_FILE_OVERWRITE":False
            },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        }
        },
    }
 
