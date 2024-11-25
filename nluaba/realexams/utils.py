@@ -7,7 +7,7 @@ from django.utils import timezone
 import cloudinary
 
 def create_csv(args):
-	new_file = default_storage.open(args['filename'], 'w')
+	new_file = default_storage.open(args['filename'], 'wb')
 	writer = csv.writer(new_file, dialect='excel')
 	test = Test.objects.get(pk=args['test_pk'])
 	if 'student_pk' in args:
