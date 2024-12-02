@@ -100,7 +100,7 @@ def submit_in_situ_response(request, question_pk=None):
 		return redirect("ica:begin_in_situ")
 	print(request.POST)
 	for key in request.POST:
-		m = re.match("answer-(\d+)", key)
+		m = re.match(r"answer-(\d+)", key)
 		if m:
 			response_answer = ResponseAnswer.objects.get(pk=int(m.group(1)))
 			if response_answer.given_response != request.POST[key]:
@@ -128,11 +128,11 @@ def submit_response(request):
 	if question_response.question.question_type == "DD":
 		response_answers = question_response.responseanswer_set.all().order_by('created')
 		for key in request.POST:
-			m = re.match("answer-left-(\d+)", key)
+			m = re.match(r"answer-left-(\d+)", key)
 			if m:
 				response_answer = response_answers[int(m.group(1))*2]
 			else:
-				m = re.match("answer-right-(\d+)", key)
+				m = re.match(r"answer-right-(\d+)", key)
 				if m:
 					response_answer = response_answers[int(m.group(1))*2 + 1]
 				else:
@@ -144,7 +144,7 @@ def submit_response(request):
 	else:
 		#For other, regex match answer-%d, number is id of responseanswer object
 		for key in request.POST:
-			m = re.match("answer-(\d+)", key)
+			m = re.match(r"answer-(\d+)", key)
 			if m:
 				response_answer = question_response.responseanswer_set.get(pk=int(m.group(1)))
 				response_answer.given_response = request.POST[key]
@@ -275,7 +275,7 @@ def create_in_situ_report(request):
 		new_instance.save()
 	required_question_pks = []
 	for key in request.POST:
-		m = re.match("required-(\d+)", key)
+		m = re.match(r"required-(\d+)", key)
 		if m:
 			required_question_pks.append(int(m.group(1)))
 	for question in assessment.get_questions():
@@ -347,7 +347,7 @@ def in_situ_assessment(request, question_pk=None):
 	finished_question_numbers = []
 	for temp_question_response in assessment_question_responses:
 		if temp_question_response.answered():
-			m = re.match("(\d+) ", str(temp_question_response.question))
+			m = re.match(r"(\d+) ", str(temp_question_response.question))
 			if m and int(m.group(1)) not in finished_question_numbers:
 				finished_question_numbers.append(int(m.group(1)))
 		elif temp_question_response.insituassessmentquestionresponse.required:
