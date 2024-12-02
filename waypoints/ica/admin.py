@@ -5,9 +5,11 @@ from django import forms
 class QuestionAssessmentOrderingInline(admin.TabularInline):
 	model = QuestionAssessmentOrdering
 	fields = ['question_number', 'question']
+	autocomplete_fields = ['question']
 
 class AssessmentAdmin(admin.ModelAdmin):
 	inlines = [QuestionAssessmentOrderingInline]
+	autocomplete_fields = ['users']
 
 class MultipleChoiceAdditionInline(admin.TabularInline):
 	model = MultipleChoiceAddition
@@ -36,6 +38,7 @@ class QuestionAdmin(admin.ModelAdmin):
 				ColumnShortAnswerAdditionInline, 
 				DragDropAdditionInline,
 				InSituAdditionInline]
+	search_fields = ['name']
 	#formfield_overrides = {
 	#	models.TextField: {'widget': forms.TextInput},
 	#}
