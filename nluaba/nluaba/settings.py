@@ -177,10 +177,10 @@ STORAGES = {
            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
            "OPTIONS": {
                # ... your S3 options here
-           },
+           }
+        },
         "staticfiles": {
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
-        }
        },
    }
 
