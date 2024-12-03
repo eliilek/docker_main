@@ -120,7 +120,7 @@ def take_test(request, test, question=None):
 	except Exception as e:
 		print(e)
 	#Generate new test
-	questions = test.questions.all().order_by('realexams_test_questions.id')
+	questions = test.questions.all().order_by('id')
 	if questions.count() == 0:
 		questions = [order.question for order in TestQuestionOrdering.objects.filter(test=test).order_by('ordering')]
 	test_instance = TestInstance(test = test, user = request.user)
