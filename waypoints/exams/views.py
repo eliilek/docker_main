@@ -63,7 +63,7 @@ def submit_response(request, test):
 			if test.time_limit != None and 'question_generated' in request.session:
 				#old_split = request.session['elapsed'].split(":")
 				old_time = test_instance.elapsed_time
-				test_instance.elapsed_time = old_time + (timezone.now() - dateutil.parser.parse(request.session['question_generated']))
+				test_instance.elapsed_time = old_time + (timezone.now() - dateutil.parser.parse(request.session.pop('question_generated')))
 				test_instance.save()
 			return redirect('exams:take_test', test=test.id)
 		if 'timed_out' in request.POST:
@@ -90,7 +90,7 @@ def take_test(request, test, question=None):
 				#old_split = request.session['elapsed'].split(":")
 				old_time = test_instance.elapsed_time
 				#request.session['elapsed'] = str(old_time + datetime.timedelta(seconds=(((timezone.now() - dateutil.parser.parse(request.session['question_generated'])) // datetime.timedelta(seconds=1)))))
-				test_instance.elapsed_time = old_time + datetime.timedelta(seconds=((timezone.now() - dateutil.parser.parse(request.session['question_generated']))))
+				test_instance.elapsed_time = old_time + (timezone.now() - dateutil.parser.parse(request.session['question_generated']))
 				test_instance.save()
 			return next_question(test_instance, request, question)
 	elif test.multiple_sittings and TestInstance.objects.filter(test=test, user=request.user, finished=None).count() != 0:

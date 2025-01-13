@@ -196,7 +196,7 @@ def submit_response(request, test):
 				#old_time = datetime.timedelta(hours = int(old_split[0]), minutes=int(old_split[1]), seconds = int(old_split[2].split(".")[0]))
 				old_time = test_instance.elapsed_time
 				#request.session['elapsed'] = str(old_time + (timezone.now() - dateutil.parser.parse(request.session['question_generated'])))
-				test_instance.elapsed_time = old_time + (timezone.now() - dateutil.parser.parse(request.session['question_generated']))
+				test_instance.elapsed_time = old_time + (timezone.now() - dateutil.parser.parse(request.session.pop('question_generated')))
 				test_instance.save()
 			return redirect('exams:take_test', test=test.id)
 		if 'timed_out' in request.POST:
@@ -222,7 +222,7 @@ def take_test(request, test, question=None):
 				#old_split = request.session['elapsed'].split(":")
 				old_time = test_instance.elapsed_time
 				#request.session['elapsed'] = str(old_time + datetime.timedelta(seconds=(((timezone.now() - dateutil.parser.parse(request.session['question_generated'])) // datetime.timedelta(seconds=1)))))
-				test_instance.elapsed_time = old_time + datetime.timedelta(seconds=((timezone.now() - dateutil.parser.parse(request.session['question_generated']))))
+				test_instance.elapsed_time = old_time + (timezone.now() - dateutil.parser.parse(request.session['question_generated']))
 				test_instance.save()
 			return next_question(test_instance, request, question)
 	elif test.multiple_sittings and TestInstance.objects.filter(test=test, user=request.user, finished=None).count() != 0:
