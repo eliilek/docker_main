@@ -17,10 +17,13 @@
   <body>
     <div class="top-bar">
       {% if user.is_authenticated %}
-      <p>Welcome, {{ user.name }}. <a href="{% url 'logout' %}">Logout?</a></p>
+      <p>Welcome, {{ user.username }}. <a href="/" onclick="$('#logout-form').submit(); return false;">Logout?</a></p>
       {% else %}
-      <p>Welcome. <a href="{% url 'login' %}">Login?</a></p>
+      <p>Welcome. <a href="{% url 'login' %}">Log in?</a></p>
       {% endif %}
+      <form style="display:none" method="post" action="{% url 'logout' %}" id="logout-form">
+        {% csrf_token %}
+      </form>
       {% block return %}{% endblock %}
     </div>
     {% block content %}
