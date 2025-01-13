@@ -80,11 +80,12 @@ def take_test(request, test, question=None):
 		test = Test.objects.get(pk=test)
 	except:
 		return render(request, 'exams/plain.html', {'msg':"I couldn't find the test you're looking for.\nUse the above link to return to the menu."})
-	try:
-		test_instance = TestInstance.objects.get(pk=request.session['instance'])
-		if 'instance' in request.session and test_instance.test == test:
-		#Render current question
-		#TODO figure out if this is a resubmit, adjust time
+	if 'instance' in request.session:
+		try:
+			test_instance = TestInstance.objects.get(pk=request.session['instance'])
+		except Exception as e:
+			print(e)
+		if test_instance.test == test:
 			if request.session.get("question_generated", False) and test.time_limit != None:
 				#old_split = request.session['elapsed'].split(":")
 				old_time = test_instance.elapsed_time
@@ -92,12 +93,10 @@ def take_test(request, test, question=None):
 				test_instance.elapsed_time = old_time + datetime.timedelta(seconds=((timezone.now() - dateutil.parser.parse(request.session['question_generated']))))
 				test_instance.save()
 			return next_question(test_instance, request, question)
-		elif test.multiple_sittings and TestInstance.objects.filter(test=test, user=request.user, finished=None).count() != 0:
-			instance = TestInstance.objects.filter(test=test, user=request.user, finished=None)[0]
-			request.session['instance'] = instance.pk
-			return next_question(instance, request, question)
-	except Exception as e:
-		print(e)
+	elif test.multiple_sittings and TestInstance.objects.filter(test=test, user=request.user, finished=None).count() != 0:
+		instance = TestInstance.objects.filter(test=test, user=request.user, finished=None)[0]
+		request.session['instance'] = instance.pk
+		return next_question(instance, request, question)
 	#Generate new test
 	questions = []
 	for section in test.testsection_set.all():
