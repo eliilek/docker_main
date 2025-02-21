@@ -281,7 +281,7 @@ def download_timings(request, student):
 	except:
 		args_dict['dates'] = False
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 
@@ -331,7 +331,7 @@ def download_timings_deck(request, deck):
 	except:
 		args_dict['dates'] = False
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 
@@ -380,7 +380,7 @@ def download_responses(request, student):
 	except:
 		args_dict['dates'] = False
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 
@@ -431,7 +431,7 @@ def download_responses_deck(request, deck):
 	except:
 		args_dict['dates'] = False
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 

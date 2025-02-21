@@ -432,7 +432,7 @@ def download_test(request, test):
 	args_dict['filename'] = str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__test_' + test.name.replace("/", "|") + '_data.csv'
 
 	#Queue job
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 	#Create Queued page
@@ -470,7 +470,7 @@ def download_student_test(request, student, test):
 	args_dict['test_pk'] = test.pk
 	args_dict['filename'] = str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__student_' + student.name + "_test_" + test.name.replace("/", "|") + "_responses.csv"
 	
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 	return redirect("realexams:queued")

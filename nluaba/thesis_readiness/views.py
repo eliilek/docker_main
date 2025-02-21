@@ -641,7 +641,7 @@ def download_assessment(request, assessment):
 	args_dict['filename'] = str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__test_' + assessment.name.replace("/", "|") + '_data.csv'
 	args_dict['assessment_pk'] = assessment.pk
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 	return redirect("thesis_readiness:queued")
