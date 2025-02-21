@@ -12,8 +12,10 @@ import csv
 from django.core.paginator import Paginator
 from django.core.files.storage import default_storage
 from safmeds.utils import create_csv
-import django_rq
+from django_rq import get_queue
 from ica.models import InSituAssessmentInstance
+
+app_queue = get_queue('waypoints')
 
 # Create your views here.
 

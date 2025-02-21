@@ -12,8 +12,10 @@ import csv
 from django.core.paginator import Paginator
 from django.core.files.storage import default_storage
 from safmeds.utils import create_csv, report_practice_data
-import django_rq
+from django_rq import get_queue
 import realexams
+
+app_queue = get_queue('nluaba')
 
 # Create your views here.
 
@@ -150,7 +152,7 @@ def report(request):
 		args_dict['duration'] = datetime.timedelta(milliseconds=int(request.POST['duration']))
 	else:
 		args_dict['duration'] = datetime.timedelta(milliseconds=60000)
-	django_rq.enqueue(report_practice_data, args_dict)
+	app_queue.enqueue(report_practice_data, args_dict)
 
 	return HttpResponse("Responses Recieved")
 
@@ -304,7 +306,7 @@ def download_timings(request, student):
 	except:
 		args_dict['dates'] = False
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 
@@ -354,7 +356,7 @@ def download_timings_deck(request, deck):
 	except:
 		args_dict['dates'] = False
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 
@@ -403,7 +405,7 @@ def download_responses(request, student):
 	except:
 		args_dict['dates'] = False
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 
@@ -454,7 +456,7 @@ def download_responses_deck(request, deck):
 	except:
 		args_dict['dates'] = False
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 

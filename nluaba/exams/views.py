@@ -9,9 +9,11 @@ import dateutil.parser
 import csv
 from django.core.files.storage import default_storage
 from exams.utils import create_csv, create_maintenance_csv
-import django_rq
+from django_rq import get_queue
 from django.core.paginator import Paginator
 from django.db.models import Count
+
+app_queue = get_queue('nluaba')
 
 # Create your views here.
 def index(request):
@@ -575,7 +577,7 @@ def download_student_test(request, student, test):
 	args_dict['test_pk'] = test.pk
 	args_dict['filename'] = str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__student_' + student.name + "_test_" + test.name.replace("/", "|") + "_responses.csv"
 	
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 	return redirect("exams:queued")
@@ -598,7 +600,7 @@ def download_test(request, test):
 	args_dict['filename'] = str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__test_' + test.name.replace("/", "|") + '_data.csv'
 	args_dict['test_pk'] = test.pk
 
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 	return redirect("exams:queued")
@@ -625,7 +627,7 @@ def download_maintenance_student(request, student):
 	args_dict['filename'] = str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__maintenance_' + str(student.name) + '_data.csv'
 	args_dict['student_pk'] = student.pk
 
-	django_rq.enqueue(create_maintenance_csv, args_dict)
+	app_queue.enqueue(create_maintenance_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 	return redirect("exams:queued")
@@ -643,7 +645,7 @@ def download_maintenance_course(request):
 	args_dict['filename'] = str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__maintenance_courses_data.csv'
 	args_dict['course_pks'] = course_pks
 
-	django_rq.enqueue(create_maintenance_csv, args_dict)
+	app_queue.enqueue(create_maintenance_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 	return redirect("exams:queued")

@@ -74,7 +74,7 @@ MIDDLEWARE = [
 ]
 
 RQ_QUEUES = {
-    'default': {
+    'nluaba': {
         'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'), # If you're on Heroku
         'DEFAULT_TIMEOUT': 500,
     }

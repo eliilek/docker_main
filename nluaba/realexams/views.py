@@ -9,8 +9,10 @@ import dateutil.parser
 import unicodecsv as csv
 from django.core.files.storage import default_storage
 from realexams.utils import create_csv
-import django_rq
+from django_rq import get_queue
 from django.core.paginator import Paginator
+
+app_queue = get_queue('nluaba')
 
 # Create your views here.
 def index(request):

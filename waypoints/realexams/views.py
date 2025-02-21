@@ -9,8 +9,10 @@ import dateutil.parser
 import unicodecsv as csv
 from django.core.files.storage import default_storage
 from realexams.utils import create_csv
-import django_rq
+from django_rq import get_queue
 from django.core.paginator import Paginator
+
+app_queue = get_queue('waypoints')
 
 # Create your views here.
 def index(request):
@@ -443,7 +445,7 @@ def download_test(request, test):
 	args_dict['filename'] = str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__test_' + test.name.replace("/", "|") + '_data.csv'
 
 	#Queue job
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 	#Create Queued page
@@ -481,7 +483,7 @@ def download_student_test(request, student, test):
 	args_dict['test_pk'] = test.pk
 	args_dict['filename'] = str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__student_' + student.name + "_test_" + test.name.replace("/", "|") + "_responses.csv"
 	
-	django_rq.enqueue(create_csv, args_dict)
+	app_queue.enqueue(create_csv, args_dict)
 	new_file = File(name=args_dict['filename'])
 	new_file.save()
 	return redirect("realexams:queued")

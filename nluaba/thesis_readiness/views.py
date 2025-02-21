@@ -12,8 +12,10 @@ import csv
 from django.core.paginator import Paginator
 from django.core.files.storage import default_storage
 from thesis_readiness.utils import create_csv
-import django_rq
+from django_rq import get_queue
 import re
+
+app_queue = get_queue('nluaba')
 
 # Create your views here.
 def index(request):

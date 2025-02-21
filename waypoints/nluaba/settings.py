@@ -75,7 +75,7 @@ MIDDLEWARE = [
 ]
 
 RQ_QUEUES = {
-    'default': {
+    'waypoints': {
         'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'), # If you're on Heroku
         'DEFAULT_TIMEOUT': 500,
     }
@@ -198,4 +198,26 @@ LOGIN_REDIRECT_URL = '/'
 
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': get_secret('C_URL'),
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'error.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
 }
