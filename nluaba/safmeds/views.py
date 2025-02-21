@@ -150,7 +150,7 @@ def report(request):
 		args_dict['duration'] = datetime.timedelta(milliseconds=int(request.POST['duration']))
 	else:
 		args_dict['duration'] = datetime.timedelta(milliseconds=60000)
-	django_rq.enqueue("report_practice_data", args_dict)
+	django_rq.enqueue(report_practice_data, args_dict)
 
 	return HttpResponse("Responses Recieved")
 
