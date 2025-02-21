@@ -82,7 +82,6 @@ def decks(request):
 
 def practice_selection(request, deck):
 	try:
-		print(deck)
 		deck = Deck.objects.get(pk=deck)
 	except e:
 		print(e)
@@ -171,7 +170,9 @@ def progress(request, deck):
 	except:
 		return render(request, "safmeds/plain.html", {"msg":"I couldn't find the deck you're looking for.\nUse the above link to return to the menu."})
 	if request.user.is_superuser:
-		students = get_user_model().objects.filter(deck=deck)
+		practices = Practice.objects.filter(deck=deck)
+		student_ids = practices.values_list('student', flat=True).distinct()
+		students = get_user_model().objects.filter(pk__in=student_ids)
 		return render(request, "safmeds/select.html", {"participants":students, "next":'safmeds:super_progress', "actual_deck_id":deck.id})
 	else:
 		practices_list = Practice.objects.filter(student=request.user, deck=deck).order_by("-created")
