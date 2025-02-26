@@ -1,0 +1,21 @@
+{% extends "jakeapp/base.html" %}
+
+{% block content %}
+	{% load static %}
+	<img src="{% static 'jakeapp/football_field_crop.jpg' %}" alt="Social Discounting Image" style="width:100%;">
+	{% if previous_text %}
+	<div>
+		Previous Response - {{previous_text|safe}}
+	</div>
+	{% endif %}
+	<form action='{% url "football_response" next_pk %}' method="post">
+		{% csrf_token %}
+		<fieldset>
+			<legend>{{question_text|safe}}</legend>
+			<label for="selfish"><input type=radio id="selfish" name="response" value="selfish" required>{{selfish_text|safe}}</label><br>
+			<label for="altruistic"><input type=radio id="altruistic" name="response" value="altruistic" required>{{other_text|safe}}</label>
+		</fieldset>
+		<input type=submit value="Submit"></form>
+	</form>
+	<p>Original Image Attribution: <a href="https://www.vecteezy.com/free-vector/football-field">Football Field Vectors by Vecteezy</a></p>
+{% endblock %}

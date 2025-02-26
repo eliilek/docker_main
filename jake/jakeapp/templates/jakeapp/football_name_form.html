@@ -1,0 +1,37 @@
+{% extends "jakeapp/base.html" %}
+
+{% block content %}
+	<div>
+	<p>The following experiment asks you to imagine that the 100 people closest to you in the world are standing on a life-sized version of the visual below.<br>
+	Person 1, the person to whom you feel the closest, is standing on the 1-yard line.<br>
+	Person 2, the second closest person to you, is standing on the 2-yard line.<br>
+	Person 5, perhaps someone you are friends with or know well, is standing on the 5-yard line.<br>
+	Person 10, someone you know but may or may not call a friend, or a more distant relative, is standing on the 10-yard line.<br>
+	Person 20, an individual you might know by name or face but rarely speak to, such as a co-worker, is standing at the 20-yard line.<br>
+	Person 50, someone you may have seen before but have had minimal interaction with, is standing on the 50-yard line.<br>
+	Finally, Person 100, a complete stranger, is standing on the 100-yard line.<br>
+	Fill in the text boxes at each yard line with the corresponding person from your list (e.g., Person 1 should go in the text box next to the 1-yard line, Person 2 should go in the text box next to the 2-yard line, etc.). In each text box, write the name of the person and your relation to them. Once you have filled in all the text boxes, you will be asked to make a series of decisions based on your selections.
+	</p>
+	{% load static %}
+	<img src="{% static 'jakeapp/football_field_crop.jpg' %}" alt="Social Discounting Image" style="width:100%;">
+	{% if error %}
+	<p>{{error}}</p>
+	{% endif %}
+	<form action="{% url 'football_name' object_pk %}" method="post">
+		{% csrf_token %}
+		<div id="top-row">
+			<label for="name_1" style="color: 0x808080">Person 1:<input type="text" id="name_1" name="name_1" required></label>
+			<label for="name_5" style="color: 0xFF8040">Person 5:<input type="text" id="name_5" name="name_5" required></label>
+			<label for="name_20" style="color: 0x0080FF">Person 20:<input type="text" id="name_20" name="name_20" required></label>
+			<label for="name_100" style="color: 0x000000">Person 100:<input type="text" id="name_100" name="name_100" required></label>
+		</div>
+		<div id="bottom-row">
+			<label for="name_2" style="color: 0xFF0000">Person 2:<input type="text" id="name_2" name="name_2" required></label>
+			<label for="name_10" style="color: 0xFFFF00">Person 10:<input type="text" id="name_10" name="name_10" required></label>
+			<label for="name_50" style="color: 0x800080">Person 50:<input type="text" id="name_50" name="name_50" required></label>
+		</div>
+		<input type="submit" value="Submit">
+	</form>
+	<p>Original Image Attribution: <a href="https://www.vecteezy.com/free-vector/football-field">Football Field Vectors by Vecteezy</a></p>
+	</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "jakeapp/base.html" %}
+
+{% block headscript %}
+	<script>
+		var start_time;
+		var object_pk;
+		var object_type;
+		var captured_token = '{{csrf_token}}';
+		function videoEnd(){
+			//Ajax back video finished, return True
+			var payload = {"duration":Date.now()-start_time, "object_pk":object_pk, "object_type":object_type, "csrfmiddlewaretoken":captured_token, "module_section_pk":{{module_section_pk}}};
+			$.post('{% url "beacon" %}', payload, function(data){
+				{% if object_type == "ModuleSectionRewatch" %}
+				$(document).off('visibilitychange');
+				{% endif %}
+				if (data.link){
+					window.location.href = data.link
+				}
+			});
+		}
+		$(document).ready(function(){
+			start_time = Date.now();
+			{% if object_pk %}
+			object_pk = {{object_pk}};
+			{% else %}
+			object_pk = null;
+			{% endif %}
+			{% if object_type %}
+			object_type = '{{object_type}}';
+			{% else %}
+			object_type = null;
+			{% endif %}
+
+			{% if object_type == "ModuleSectionRewatch" %}
+			$(document).on('visibilitychange', function() {
+				if(document.visibilityState == 'hidden') {
+        			// page is hidden
+        			$("#video-player").get(0).pause();
+        			var payload = {"duration":Date.now()-start_time, "object_pk":object_pk, "object_type":object_type, "csrfmiddlewaretoken":captured_token, "module_section_pk":{{module_section_pk}}};
+        			navigator.sendBeacon('{% url "beacon" %}', JSON.stringify(payload));
+    			} else {
+        			// page is visible
+        			start_time = Date.now()
+        			$("#video-player").get(0).play();
+    			}
+			});
+			{% endif %}
+			$("#play-div").click(function(){
+				$("#play-div").remove();
+				$("#video-player").get(0).play();
+			});
+		});
+
+		function captureTime(){
+			$("#durationInput").value(Date.now() - start_time);
+			return true;
+		}
+
+		function show_button(){
+			$("#play-div").removeClass('d-none');
+		}
+	</script>
+{% endblock %}
+
+{% block content %}
+	<video oncanplay="show_button()" onended="return videoEnd()" class="w-100" id="video-player"> <source src="{{ video_file.url }}">Unsupported File Type</video>
+	<div id="play-div" class="w-100 button position-absolute top-0 d-none">Begin Section</div>
+{% endblock %}

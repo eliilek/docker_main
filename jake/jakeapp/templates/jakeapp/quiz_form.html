@@ -1,0 +1,24 @@
+{% extends "jakeapp/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block headscript %}
+	<script>
+		var start_time = Date.now();
+
+		function captureTime(){
+			$("#durationInput").val(Date.now() - start_time);
+			return true;
+		}
+	</script>
+{% endblock %}
+
+{% block content %}
+	<form action='{% url "quiz" object_pk %}' method="post" onsubmit="return captureTime()">
+		{% csrf_token %}
+		<table>
+		{% crispy form %}
+	</table>
+		<input type="hidden" id="durationInput" name="durationInput">
+		<input type="submit" value="Submit">
+	</form>
+{% endblock %}

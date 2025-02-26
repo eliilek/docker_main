@@ -76,6 +76,33 @@ services:
             - S3_SECRET
             - CLOUDINARY_URL
             - POSTGRES_PASSWORD
+    jake-server:
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: ./docker/jake-backend/Dockerfile
+        entrypoint: /app/docker/jake-backend/server-entrypoint.sh
+        volumes:
+            - static_volume:/app/jake-backend/django_static
+        expose:
+            - 8000
+        environment:
+            DEBUG: "TRUE"
+            REDIS_URL: 'redis://redis:6379'
+            DJANGO_DB: postgresql
+            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
+            POSTGRES_NAME: jake-db
+            POSTGRES_USER: doadmin
+            POSTGRES_PORT: 25060
+            S3_ACCESS: /run/secrets/S3_ACCESS
+            S3_SECRET: /run/secrets/S3_SECRET
+            C_URL: /run/secrets/CLOUDINARY_URL
+            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
+        secrets:
+            - S3_ACCESS
+            - S3_SECRET
+            - CLOUDINARY_URL
+            - POSTGRES_PASSWORD
     waypoints-worker:
         restart: unless-stopped
         build:
@@ -126,6 +153,34 @@ services:
             POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
         depends_on:
             - nluaba-server
+            - redis
+        secrets:
+            - S3_ACCESS
+            - S3_SECRET
+            - CLOUDINARY_URL
+            - POSTGRES_PASSWORD
+    jake-worker:
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: ./docker/jake-backend/Dockerfile
+        entrypoint: /app/docker/jake-backend/worker-entrypoint.sh
+        volumes:
+            - static_volume:/app/jake-backend/django_static
+        environment:
+            DEBUG: "True"
+            REDIS_URL: 'redis://redis:6379'
+            DJANGO_DB: postgresql
+            POSTGRES_HOST: kleinapp-database-do-user-17842599-0.k.db.ondigitalocean.com
+            POSTGRES_NAME: jake-db
+            POSTGRES_USER: doadmin
+            POSTGRES_PORT: 25060
+            S3_ACCESS: /run/secrets/S3_ACCESS
+            S3_SECRET: /run/secrets/S3_SECRET
+            C_URL: /run/secrets/CLOUDINARY_URL
+            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
+        depends_on:
+            - jake-server
             - redis
         secrets:
             - S3_ACCESS

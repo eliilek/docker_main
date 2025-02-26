@@ -1,0 +1,20 @@
+{% load crispy_forms_filters %}
+    <div class="row justify-content-between">
+      <div class="w-50 text-end">{{ field.label_tag }}</div>
+      <div class="row w-50 justify-content-evenly">
+      {% for radio in field %}
+        <div class="form-check form-check-inline w-auto flex-fill">
+          {{ radio }}
+          <label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+        </div>
+      {% endfor %}
+    </div>
+      {% if field.errors %}
+        <div class="invalid-feedback d-block">
+          {{ field.errors|join:", " }}
+        </div>
+      {% endif %}
+      {% if field.help_text %}
+        <small class="form-text text-muted">{{ field.help_text }}</small>
+      {% endif %}
+    </div>

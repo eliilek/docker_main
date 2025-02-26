@@ -1,0 +1,20 @@
+{% extends "jakeapp/base.html" %}
+
+{% block content %}
+	<div class="d-flex flex-column align-items-center">
+		{% if in_progress %}
+		<h2>Resume Module</h2>
+		<a href="{% url 'resume' in_progress.pk %}" class="button horiz-button w-25">{{in_progress.module.name}}</a>
+		{% elif upcoming %}
+		<a href="{% url 'begin' upcoming.pk %}" class="button horiz-button w-25">{{upcoming.name}}</a>
+		{% endif %}
+	</div>
+	{% if completed %}
+	<div class="d-flex flex-column align-items-center">
+		<h2>Review Completed Module</h2>
+		{% for instance in completed %}
+			<a href="{% url 'review' instance.module.pk %}" class="button horiz-button w-25">{{instance.module.name}}</a>
+		{% endfor %}
+	</div>
+	{% endif %}
+{% endblock %}

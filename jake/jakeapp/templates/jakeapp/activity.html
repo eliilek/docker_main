@@ -1,0 +1,70 @@
+{% extends "jakeapp/base.html" %}
+{% load static %}
+
+{% block headscript %}
+<link rel="stylesheet" href="{% static 'jakeapp/dragula.css' %}">
+<script>
+		var start_time = Date.now();
+
+		function captureTime(){
+			$("#durationInput").val(Date.now() - start_time);
+			return true;
+		}
+</script>
+{% endblock %}
+
+{% block content %}
+<script src="{% static 'jakeapp/dragula.js' %}"></script>
+<div>
+	<table>
+		<tr>
+			<th>{{left_header}}</th>
+			<th>Drop Here</th>
+			<th>{{right_header}}</th>
+		</tr>
+		{% for tuple in shuffled_list %}
+		<tr>
+			<td class="to-dragula"><span data-text='{{tuple.0}}'>{{tuple.0}}</span></td>
+			<td class="to-dragula to-dragula-dest" data-text='{{tuple.1}}'></td>
+			<td>{{tuple.1}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<form id="jakeform" action="{% url 'activity_submit' activity_pk %}" method="post" onsubmit="return captureTime()">
+		<input id="durationInput" name="durationInput" type="hidden">
+		{% csrf_token %}
+	</form>
+</div>
+<script>
+	var to_match = $(".to-dragula").length / 2;
+	{% for left_text, right_text in key.items %}
+		$("td[data-text='{{right_text}}']").attr('data-match', '{{left_text}}')
+	{% endfor %}
+	var drake = dragula(Array.from(document.querySelectorAll(".to-dragula")), {
+		accepts: function(el, target, source, sibling){
+			return target.classList.contains('to-dragula-dest');
+		},
+		moves: function(el, source, handle, sibling){
+			return source.classList.contains('to-dragula');
+		},
+		revertOnSpill: true,
+	});
+	drake.on('drop', function(el, target, source, sibling){
+			source.classList.remove("incorrect");
+			if (el.getAttribute("data-text") == target.getAttribute("data-match")){
+				target.classList.add("correct");
+				target.classList.remove("to-dragula-dest");
+				target.classList.remove("to-dragula");
+				to_match = to_match - 1;
+				if (to_match == 0){
+					$("#jakeform").submit();
+				}
+				return true;
+			}
+			else {
+				target.classList.add('incorrect');
+				return false;
+			}
+		})
+</script>
+{% endblock %}

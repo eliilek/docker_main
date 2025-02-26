@@ -1,0 +1,26 @@
+{% extends "jakeapp/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block headscript %}
+	<script>
+		var start_time = Date.now();
+
+		function captureStartEnd(){
+			$("#startTimeInput").val(start_time);
+			$("#endTimeInput").val(Date.now());
+			return true;
+		}
+	</script>
+{% endblock %}
+
+{% block content %}
+	<form action='{% url "assessment" object_pk %}' method="post" onsubmit="return captureStartEnd()">
+		{% csrf_token %}
+		<table>
+		{% crispy form form.helper %}
+	</table>
+		<input type="hidden" id="startTimeInput" name="startTimeInput">
+		<input type="hidden" id="endTimeInput" name="endTimeInput">
+		<input type="submit" value="Submit">
+	</form>
+{% endblock %}

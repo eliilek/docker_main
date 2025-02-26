@@ -1,0 +1,274 @@
+body{
+  text-align: center
+}
+
+.top-bar{
+  background-color: #CCC;
+}
+
+button{
+  background-color: red;
+  border: black 2px solid;
+  border-radius: 5px;
+  color: black;
+  font-size: 30px;
+  text-align: center;
+}
+
+table{
+  border-collapse: separate;
+  width: 100%;
+}
+
+td{
+  padding: 4px 0;
+  border-spacing: 40px 0;
+  border-left: 2px solid white;
+  border-right: 2px solid #BBB;
+}
+td:last-child{
+  border-right: none;
+  text-align: center;
+}
+
+th{
+  border-spacing: 20px 0;
+  border-left: 2px solid white;
+  border-right: 2px solid #BBB;
+}
+
+th:last-child{
+  border-right: none;
+}
+
+tr:nth-child(even){
+  background-color: #DDD;
+}
+
+.manual{
+  font-weight: bold;
+}
+
+input[type="text"]{
+  border: solid black 1px;
+  width: 300px;
+}
+
+pre{
+  white-space: pre-wrap;
+}
+
+#content{
+  width: 500px;
+  margin: 0 auto 40px auto;
+  text-align: left;
+}
+
+.label-box{
+  width: 200px;
+}
+
+#game{
+  border: solid black 2px;
+}
+
+#board{
+  border-bottom: solid black 2px;
+  padding: 20px;
+  width: 100% - 40px;
+  text-align: left;
+}
+
+#footer{
+  height: 80px;
+  text-align: left;
+  width: 100%;
+}
+
+#moves{
+  display: inline-block;
+  height: 100%;
+  width: 74%;
+  vertical-align: top;
+}
+
+#last-moves{
+  border-left: solid black 2px;
+  display: inline-block;
+  height: 100%;
+  width: 40%;
+}
+
+#last-moves table{
+  width:100%;
+  height:100%;
+}
+
+#players{
+  border-right: solid black 2px;
+  display: inline-block;
+  height: 100%;
+  width: 25%;
+}
+
+#players table{
+  width: 100%;
+  height: 100%;
+}
+
+#players tr{
+  border: none;
+}
+
+#players td{
+  padding-left: 20px;
+}
+
+#controls{
+  display: inline-block;
+  padding-right: 80px;
+}
+
+#dice{
+  display: inline-block;
+  vertical-align: middle;
+  margin-bottom: 80px;
+  padding-right: 20px;
+}
+
+.die{
+  border: 1px solid black;
+  border-radius: 8px;
+  display: table-cell;
+  font-size: 20px;
+  font-weight: bold;
+  height: 40px;
+  width: 40px;
+  vertical-align: middle;
+  text-align: center;
+  margin: auto 4px;
+}
+
+.gap{
+  display: table-cell;
+  width: 8px;
+}
+
+.player-row{
+  width: 100%;
+  height: 33%;
+  position: absolute;
+  z-index: -1;
+}
+
+.red{
+  top: 0;
+  background-color: #D8D8D8;
+}
+
+.blue{
+  top: 33%;
+  background-color: #B0B0B0;
+}
+
+.green{
+  top: 66%;
+  background-color: #888888;
+}
+
+.square{
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  border: 1px solid black;
+  position: relative;
+  vertical-align: top;
+  text-align: right;
+}
+
+.square:last-child{
+  background-color: green;
+  z-index: -2;
+}
+
+.little-button{
+  background-color: white;
+  font-size: 12px;
+  border-width: 1px;
+}
+
+.mark-button {
+  background-color: #993685;
+  color: white;
+  border: 3px solid #993685;
+  text-decoration: none;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: .3s all ease-in-out; }
+  .mark-button:hover {
+    background-color: white;
+    color: #993685; }
+
+
+.button {
+  background-color: #993685;
+  color: white;
+  border: 3px solid #993685;
+  font-size: 24px;
+  text-decoration: none;
+  padding: 8px 24px;
+  border-radius: 3px;
+  transition: .3s all ease-in-out; }
+  .button:hover {
+    background-color: white;
+    color: #993685; }
+
+    #select-participant {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column; }
+    #select-participant h1 {
+    margin-bottom: 18px; }
+  #select-participant .participant-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px; }
+    #select-participant .participant-list .button {
+      margin-bottom: 24px; }
+      #select-participant .participant-list .horiz-button:nth-of-type(odd) {
+        margin-right: 24px; }
+
+.column {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+}
+
+small::before {
+  content: " ";
+  display: block;
+}
+
+.real_input {
+  height: 35px;
+}
+
+.form-check .form-check-input {
+  float: none !important;
+}
+
+.asteriskField {
+  display: none;
+}
+
+.incorrect{
+  background-color:red;
+}
+.correct{
+  background-color:green;
+}
