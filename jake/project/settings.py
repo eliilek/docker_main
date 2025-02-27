@@ -78,7 +78,7 @@ MIDDLEWARE = [
 ]
 
 RQ_QUEUES = {
-    'default': {
+    'jake': {
         'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
         'DEFAULT_TIMEOUT': 500,
     }
