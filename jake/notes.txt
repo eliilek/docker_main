@@ -1,0 +1,103 @@
+Next Time on DBZ:
+	Figure out how to make assessments render the way we want
+	Literally I'm trying to reverse engineer a table. Just make it a table.
+	**NOTE may make more sense to dispose of the crispy layout helper and create the flex I want in template**
+		Within each fieldset header - as table
+			Ideally we have a first row with "Question" and the input labels as columns
+			We then have a row for each question with the radio buttons without labels
+	Continue with testing
+
+	**Did I fix this already?** Do Below - also second assessment is broken because AssessmentQuestions are indistinguishable between the 2 sections
+
+Steps:
+Create db schema (below notes)*
+Create views
+	Once consented, splash page is a menu where they can select from modules they're on or have completed. If they access a completed module, just play the videos, skip the assessments, maybe give them a chapter menu if I'm feeling generous. Record access/watch time.
+Create forms
+	Do this next, this will inform/simplify templates and views
+Create templates
+Splice slideshow into chunks, export videos
+
+Logic Notes:
+	Menu when selecting uncompleted module and redirect after a quiz submission both go to Proceed view
+	If there's an incomplete assessment_instance_set, do that
+
+One to one extension of Authtools User to include state information.
+	Consent DateTime with null default, confirm with Jacob they only need to do that once.
+Quiz has questions, passing threshold
+Question has responses (many to many), correct response (foreign key)
+AssessmentInstanceSet has Module it follows (null for pre), 3 Assessments and 1 Football Assessment
+Assessment has AssessmentQuestions, name/title
+AssessmentInstance has created, completed timestamps
+AssessmentQuestion has answers, displays as radio buttons by default, easy.
+FootballNames has 8 sets of names, colors, yards, foreignkey to AssessmentInstance or User Extension as appropriate
+	Confirm if Football response is redone each assessment or use the same people/colors throughout modules
+FootballAssessmentInstance has ascending/descending, do we need to record section order or just randomize?
+When creating FootballAssessmentInstance, randomize list of sections, create in order.
+FootballAssessment has question text, response 1 text, response 2 text, other amount, starting amount, ending amount, step size. Text uses {5} to refer to 5 yard person, etc.
+Are there exclusion criteria?
+Edit narration/video/whatever into separate videos for each segment between quizes
+Module has many-to-many with video, quiz, ordering #, confirm if we need to record anything about number of views, timestamps, etc
+	May make more sense to have a module instance that tracks it's own state vs user tracking checkpoint #
+
+
+My understanding: Participants will progress through a series of 5 modules. In each module, they will view a video you recorded, broken up by comprehension checks, take a larger comprehension check after the video, then complete the 4 self-assessments before moving on to the next module.
+Call Notes - slide show w/narration, similar to BASET or food handler training. Figure out how to break up video, add questions. Should get 100% on in-module checks, 80% on post-module quiz.
+Before getting first module, take the self-assessments, potentially exclusion criteria depending on how they respond.
+Self-assessments are mostly prefab, one special one has football field visual, color code dots on 1,2,5,10,20,50,100, text box to enter names. Then display questions based on that. Include a way to use previous answers in question text.
+Ascending or descending for the whole assessment, sections in randomized order. Checkbox to randomize order within a question or not.
+Self-assessment includes scale questions (Never true, rarely true, etc)
+
+Requirements Questions:
+-What can be done in multiple sittings? If they complete 2 modules, can they come back to module 3 tomorrow? If they get halfway through a module and then quit, what should they see when they return? What about if they quit halfway through a comprehension check?
+-Are the quizzes all multiple choice or are there other question formats? Will any of the questions need to display images as part of the question?
+--All multiple choice
+-For the quizzes:
+	--All questions displayed on one page
+	-Is there a time limit to answer individual questions or to complete the whole quiz?
+	--No time limit
+	-Should they get feedback on incorrect answers immediately, at the end, or never?
+	--Identify which answers were incorrect at end, not what the correct answer was
+	-Is there a certain score threshold they need to hit in order to "pass"?
+	--100% for mid, 80% for end
+	-What happens if they don't pass a quiz either during or after a module?
+	--They have to retake it, give feedback on which answers are incorrect then have them retake.
+-I need an exhaustive list of all data you want to record. For the quizzes, obviously the given answer and correct/incorrect, but other examples include the time taken to answer each question, the timestamp when they started/completed the quiz, etc. Is there anything else you would want to record, such as the time they spent in each module, if they restarted the video or something, idk. This is mostly just to emphasize that anything you don't tell me to record up front will not be recorded, and we won't be able to go back and discover it later.
+
+Hours:
+11/4 | 1 hour | Initial setup, configuring
+11/21 | .5 hours | Models.py
+12/5 | .75 hours | Models, assessment response structures
+12/11 | 1.75 hour | Finishing models, module logic structure, quiz forms
+1/8 | 1.25 hours | Building out templates, views
+1/9 | 1 hour | Building out video templates, learning how to beacon duration
+1/13 | 1 hour | Finishing video templates and beacon/ajax logic
+1/16 | 4.75 hour | Finishing quiz form, assessment form, flow logic, Football up through needing clarification on question presentation, creating drag and drop activity (Out of original scope!)
+1/23 | 4.25 hours | Finish building football, start integration, rework assessments to allow sections
+15 min loose debugging
+2/8 | 1.5 hours
+2/13 | 1.25 hours
+2/16 | 2.25 hours
+2/21 | 2.5 hours
+2/23 | 1 hour*
+2/24 | 2.25 hour
+2/26 | .5 hour, I'm not billing for the git fiasco
+2/27 | 10:45
+
+<table>
+		{% for field in form %}
+			{% if forloop.first %}
+			<tr><th></th>
+				{% for choice in field.choices %}
+				<th>{{choice.1}}</th>
+				{% endfor %}
+			</tr>
+			{% endif %}
+			<tr>
+			<td>{{field.choice_label}}</td>
+			{% for choice in field.choices %}
+			<td><label for="{{field.id_for_label}}">{{field.choice_label}}</label></td>
+			{% endfor %}
+			</tr>
+		{% endfor %}
+		</table>
