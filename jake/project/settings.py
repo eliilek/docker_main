@@ -163,14 +163,26 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/jakeapp/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'jakeapp/static'),
-]
+#STATIC_URL = '/jakeapp/static/'
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'jakeapp/static'),
+#]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+STORAGES = {
+       "default": {
+           "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+           "OPTIONS": {
+               # ... your S3 options here
+           }
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+       },
+   }
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_STORAGE_BUCKET_NAME = 'jakeappbucket'
