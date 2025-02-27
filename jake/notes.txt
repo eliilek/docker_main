@@ -82,7 +82,7 @@ Hours:
 2/23 | 1 hour*
 2/24 | 2.25 hour
 2/26 | .5 hour, I'm not billing for the git fiasco
-2/27 | 10:45
+2/27 | 1 hour, 12:30
 
 <table>
 		{% for field in form %}
