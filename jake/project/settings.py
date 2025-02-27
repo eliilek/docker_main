@@ -24,8 +24,8 @@ def get_secret(key, default=None):
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MEDIA_URL = '/jakeapp/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'jakeapp/media')
+#MEDIA_URL = '/jakeapp/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'jakeapp/media')
 
 STATIC_URL = '/jakeapp/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'jakeapp/static')
@@ -195,6 +195,8 @@ AWS_ACCESS_KEY_ID = get_secret('S3_ACCESS')
 AWS_SECRET_ACCESS_KEY = get_secret('S3_SECRET')
 AWS_DEFAULT_ACL = None
 AWS_S3_FILE_OVERWRITE = False
+
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
 
 LOGIN_URL = '/accounts'
 LOGIN_REDIRECT_URL = '/'
