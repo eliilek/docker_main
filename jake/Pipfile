@@ -13,6 +13,7 @@ whitenoise = "*"
 django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
 pytz = "*"
+boto3 = "*"
 
 [dev-packages]
 

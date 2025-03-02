@@ -82,7 +82,10 @@ Hours:
 2/23 | 1 hour*
 2/24 | 2.25 hour
 2/26 | .5 hour, I'm not billing for the git fiasco
-2/27 | 1 hour, 12:30
+2/27 | 2 hour
+29.5 hours, $1475 at 50/h
+3/2 | 1:15
+
 
 <table>
 		{% for field in form %}

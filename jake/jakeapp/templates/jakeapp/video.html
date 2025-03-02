@@ -8,11 +8,9 @@
 		var captured_token = '{{csrf_token}}';
 		function videoEnd(){
 			//Ajax back video finished, return True
-			var payload = {"duration":Date.now()-start_time, "object_pk":object_pk, "object_type":object_type, "csrfmiddlewaretoken":captured_token, "module_section_pk":{{module_section_pk}}};
+			var payload = {"duration":Date.now()-start_time, "object_pk":object_pk, "object_type":object_type, "csrfmiddlewaretoken":captured_token, "module_section_pk":{{module_section_pk}}, "finished":true};
 			$.post('{% url "beacon" %}', payload, function(data){
-				{% if object_type == "ModuleSectionRewatch" %}
 				$(document).off('visibilitychange');
-				{% endif %}
 				if (data.link){
 					window.location.href = data.link
 				}
@@ -31,7 +29,6 @@
 			object_type = null;
 			{% endif %}
 
-			{% if object_type == "ModuleSectionRewatch" %}
 			$(document).on('visibilitychange', function() {
 				if(document.visibilityState == 'hidden') {
         			// page is hidden
@@ -44,11 +41,10 @@
         			$("#video-player").get(0).play();
     			}
 			});
-			{% endif %}
-			$("#play-div").click(function(){
-				$("#play-div").remove();
-				$("#video-player").get(0).play();
-			});
+			//$("#play-div").click(function(){
+			//	$("#play-div").remove();
+			//	$("#video-player").get(0).play();
+			//});
 		});
 
 		function captureTime(){
@@ -56,13 +52,13 @@
 			return true;
 		}
 
-		function show_button(){
-			$("#play-div").removeClass('d-none');
-		}
+		//function show_button(){
+		//	$("#play-div").removeClass('d-none');
+		//}
 	</script>
 {% endblock %}
 
 {% block content %}
-	<video oncanplay="show_button()" onended="return videoEnd()" class="w-100" id="video-player"> <source src="{{ video_file.url }}">Unsupported File Type</video>
-	<div id="play-div" class="w-100 button position-absolute top-0 d-none">Begin Section</div>
+	<video onended="return videoEnd()" class="w-100" id="video-player" controls> <source src="{{ video_file.url }}">Unsupported File Type</video>
+	<!-- <div id="play-div" class="w-100 button position-absolute top-0 d-none">Begin Section</div> -->
 {% endblock %}

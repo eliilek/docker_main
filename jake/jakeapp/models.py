@@ -296,6 +296,11 @@ class ModuleInstance(models.Model):
 	def next_section(self):
 		return self.module.next_section(ordering_number=self.current_section.ordering_number)
 
+class SectionDuration(models.Model):
+	module_instance = models.ForeignKey(ModuleInstance, on_delete=models.CASCADE)
+	section = models.ForeignKey(ModuleSection, on_delete=models.CASCADE)
+	duration = models.DurationField(default=timezone.timedelta(milliseconds=0))
+
 class ModuleSectionRewatch(models.Model):
 	module_section = models.ForeignKey(ModuleSection, on_delete=models.CASCADE)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

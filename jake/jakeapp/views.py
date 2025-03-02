@@ -363,7 +363,15 @@ def beacon(request):
 		except Exception as e:
 			print(e)
 			return HttpResponse("Bad")
-		module_instance.current_section_video_complete = True
-		module_instance.save()
-		return JsonResponse({"link":reverse("resume", args=(module_instance.pk,))})
+		if SectionDuration.objects.filter(module_instance=module_instance, section=module_section).count() == 0:
+			duration = SectionDuration(module_instance=module_instance, section=module_section)
+			duration.save()
+		else:
+			duration = SectionDuration.objects.filter(module_instance=module_instance, section=module_section).first()
+		duration.duration = duration.duration + timezone.timedelta(milliseconds=int(my_body['duration']))
+		duration.save()
+		if "finished" in my_body:
+			module_instance.current_section_video_complete = True
+			module_instance.save()
+			return JsonResponse({"link":reverse("resume", args=(module_instance.pk,))})
 	return HttpResponse("OK")
