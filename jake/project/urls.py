@@ -41,4 +41,6 @@ urlpatterns = [
     path('queued', views.queued, name='queued'),
     path('retrieve/<str:filename>', views.retrieve, name='retrieve'),
     path('delete/<str:filename>', views.delete, name='delete'),
+    path('download', views.download, name='download'),
+    path('download/<int:user_pk>', views.download_user, name="download_user"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

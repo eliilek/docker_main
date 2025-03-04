@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from jakeapp.models import *
 from jakeapp.forms import *
+from jakeapp.utils import *
 import re
 import sys
 from project import settings
@@ -12,7 +13,9 @@ from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 import json
 from django.core.files.storage import default_storage
 from django_rq import get_queue
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 app_queue = get_queue('jake')
 
 # Create your views here.
@@ -379,6 +382,26 @@ def beacon(request):
 			module_instance.save()
 			return JsonResponse({"link":reverse("resume", args=(module_instance.pk,))})
 	return HttpResponse("OK")
+
+def download(request):
+	if not request.user.is_superuser:
+		return render(request, "jakeapp/error.html", {"msg":"You are not authorized to view this page.\nPlease login as a superuser or use the above link to return to the menu."})
+	users = User.objects.filter(is_superuser=False)
+	return render(request, "jakeapp/download.html", {"users":users})
+
+def download_user(request, user_pk):
+	if not request.user.is_superuser:
+		return render(request, "jakeapp/error.html", {"msg":"You are not authorized to view this page.\nPlease login as a superuser or use the above link to return to the menu."})
+	try:
+		user = User.objects.get(pk=user_pk)
+	except:
+		return render(request, "jakeapp/error.html", {"msg":"I couldn't find the user you're looking for."})
+
+	args_dict = {'filename': str(datetime.datetime.today()).replace(":", "").replace(".", "") + '__user_' + user.email.split("@")[0] + '_data.csv', "user_pk":user_pk}
+	app_queue.enqueue(create_csv, args_dict)
+	new_file = File(name=args_dict['filename'])
+	new_file.save()
+	return redirect("queued")
 
 def queued(request):
 	if not request.user.is_superuser:

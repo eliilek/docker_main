@@ -1,0 +1,17 @@
+{% extends "jakeapp/base.html" %}
+
+{% block content %}
+<div id="select-participant">
+  <h1>Select a Participant</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    {% if users %}
+      {% for user in users %}
+      <a href="{% url 'download_user' user.pk %}" class="button horiz-button">{{user.email}}</a>
+      {% endfor %}
+    {% else %}
+      No users are available.
+    {% endif %}
+  </div>
+  </div>
+
+{% endblock %}
