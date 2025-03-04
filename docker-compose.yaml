@@ -70,7 +70,6 @@ services:
             S3_ACCESS: /run/secrets/S3_ACCESS
             S3_SECRET: /run/secrets/S3_SECRET
             C_URL: /run/secrets/CLOUDINARY_URL_OLD
-            CLOUDINARY_URL: /run/secrets/CLOUDINARY_URL_OLD
             POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
         secrets:
             - S3_ACCESS
@@ -151,7 +150,6 @@ services:
             S3_ACCESS: /run/secrets/S3_ACCESS
             S3_SECRET: /run/secrets/S3_SECRET
             C_URL: /run/secrets/CLOUDINARY_URL_OLD
-            CLOUDINARY_URL: /run/secrets/CLOUDINARY_URL_OLD
             POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
         depends_on:
             - nluaba-server
