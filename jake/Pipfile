@@ -16,6 +16,7 @@ pytz = "*"
 boto3 = "*"
 unicodecsv = "*"
 psycopg2 = "*"
+gunicorn = "*"
 
 [dev-packages]
 
