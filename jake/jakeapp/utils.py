@@ -43,7 +43,7 @@ def create_csv(args):
 		writer.writerow(["Module:" + module_instance.module.name, "Started:", module_instance.created.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y"), "Completed:", module_instance.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y")])
 		for section in module_instance.module.modulesection_set.all().order_by("ordering_number"):
 			writer.writerow(["Section " + str(section.ordering_number)])
-			for duration in SectionDuration.objects.filter(module_instance=module_instance, module_section=section):
+			for duration in SectionDuration.objects.filter(module_instance=module_instance, section=section):
 				writer.writerow(["Watch Duration", str(duration.duration), "Created", (duration.created.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y") if duration.created else None)])
 			if section.quiz:
 				if section.quiz.activity:
