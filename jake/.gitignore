@@ -3,3 +3,4 @@ venv
 staticfiles
 .env
 *.mp4
+notes.txt
