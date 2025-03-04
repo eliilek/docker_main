@@ -37,7 +37,8 @@ def signup(request):
 
 def initial(request):
 	if request.user.is_superuser:
-		return redirect("admin:index")
+		#return redirect("admin:index")
+		return render(request, "jakeapp/splash.html")
 	if not request.user.userdata.consented:
 		return redirect("consent")
 	if AssessmentInstanceSet.objects.filter(user=request.user).count() == 0:

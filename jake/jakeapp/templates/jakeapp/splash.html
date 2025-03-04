@@ -1,0 +1,15 @@
+{% extends "jakeapp/base.html" %}
+
+{% block content %}
+<div id="select-participant">
+  <h1>Select an Action</h1>
+  <div class="participant-list" style="display:flex; align-items: center; flex-wrap: wrap; justify-content: center; max-width:600px;">
+    
+    <a href="{% url 'download' %}" class="button horiz-button">Download User Data</a>
+    <a href="{% url 'queued' %}" class="button horiz-button">View previously downloaded files</a>
+    <a href="{% url 'admin:index' %}" class="button horiz-button">Admin Site</a>
+    
+  </div>
+  </div>
+
+{% endblock %}
