@@ -33,6 +33,9 @@ def test_action(request, test):
 	return render(request, 'exams/test_action.html', {'test':test})
 
 def maintenance_probe(request):
+	instances = MaintenanceInstance.objects.filter(user=request.user, finished__isnull=True)
+	if instances.count() == 1:
+		return redirect("exams:maintenance_take", instance_pk=instances[0].pk)
 	courses = Course.objects.all()
 	if courses.count() == 0:
 		return render(request, 'exams/plain.html', {'msg':"No courses have been registered yet.\nUse the above link to return to the menu."})
@@ -45,12 +48,21 @@ def maintenance_probe_select(request):
 	if instances.count() == 1:
 		return redirect("exams:maintenance_take", instance_pk=instances[0].pk)
 	elif instances.count() > 1:
-		return render(request, 'exams/plain.html', {'msg':"The database is misconfigured, please contact your administrator."})
+		for instance in instances:
+			if instance.unanswered_questions == 0:
+				instance.finished = timezone.now()
+				instance.save()
+			else:
+				instance.delete()
+		#return render(request, 'exams/plain.html', {'msg':"The database is misconfigured, please contact your administrator."})
 	return render(request, 'exams/maintenance_probe_select.html', {"superuser":request.user.is_superuser})
 
 def maintenance_create(request):
 	if request.method != "POST":
 		return render(request, 'exams/plain.html', {'msg':"You have reached this page in error.\nUse the above link to return to the menu."})
+	instances = MaintenanceInstance.objects.filter(user=request.user, finished__isnull=True)
+	if instances.count() == 1:
+		return redirect("exams:maintenance_take", instance_pk=instances[0].pk)
 	courses = []
 	for key in request.POST:
 		if "checkbox-" in key:
@@ -67,6 +79,9 @@ def maintenance_create(request):
 		maintenance.save()
 		maintenance.courses.set(courses)
 		maintenance.save()
+	instances = MaintenanceInstance.objects.filter(user=request.user, finished__isnull=True, maintenance=maintenance)
+	if instances.count() == 1:
+		return redirect("exams:maintenance_take", instance_pk=instances[0].pk)
 	new_instance = maintenance.create_instance(request.user)
 	return redirect("exams:maintenance_take", instance_pk=new_instance.pk)
 
@@ -141,7 +156,6 @@ def submit_maintenance_response(request, instance_pk):
 	if request.method != "POST":
 		return redirect('exams:maintenance_take', instance_pk=instance_pk)
 	questions = instance.maintenanceresponse_set.all().order_by('id')
-	print(questions)
 	current_question = questions[int(request.POST['question_number'])-1]
 	current_question.answer = str(request.POST['answer'])
 	current_question.save()

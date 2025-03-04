@@ -121,6 +121,9 @@ class MaintenanceInstance(models.Model):
     def total_questions(self):
         return self.maintenanceresponse_set.all().count()
 
+    def unanswered_questions(self):
+        return self.maintenanceresponse_set.filter(answer="").count()
+
 class MaintenanceResponse(models.Model):
     maintenance_instance = models.ForeignKey(MaintenanceInstance, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
