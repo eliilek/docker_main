@@ -69,12 +69,12 @@ services:
             POSTGRES_PORT: 25060
             S3_ACCESS: /run/secrets/S3_ACCESS
             S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL
+            C_URL: /run/secrets/CLOUDINARY_URL_OLD
             POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
         secrets:
             - S3_ACCESS
             - S3_SECRET
-            - CLOUDINARY_URL
+            - CLOUDINARY_URL_OLD
             - POSTGRES_PASSWORD
     jake-server:
         restart: unless-stopped
@@ -149,7 +149,7 @@ services:
             POSTGRES_PORT: 25060
             S3_ACCESS: /run/secrets/S3_ACCESS
             S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL
+            C_URL: /run/secrets/CLOUDINARY_URL_OLD
             POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
         depends_on:
             - nluaba-server
@@ -157,7 +157,7 @@ services:
         secrets:
             - S3_ACCESS
             - S3_SECRET
-            - CLOUDINARY_URL
+            - CLOUDINARY_URL_OLD
             - POSTGRES_PASSWORD
     jake-worker:
         restart: unless-stopped
@@ -200,6 +200,8 @@ secrets:
         environment: S3_SECRET
     CLOUDINARY_URL:
         environment: CLOUDINARY_URL
+    CLOUDINARY_URL_OLD:
+        environment: CLOUDINARY_URL_OLD
     POSTGRES_PASSWORD:
         environment: POSTGRES_PASSWORD
 
