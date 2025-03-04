@@ -38,4 +38,7 @@ urlpatterns = [
     path('signup/', views.signup, name="signup"),
     path('activity/<int:activity_pk>', views.activity, name="activity"),
     path('activity/<int:activity_pk>/submit', views.activity_submit, name="activity_submit"),
+    path('queued', views.queued, name='queued'),
+    path('retrieve/<str:filename>', views.retrieve, name='retrieve'),
+    path('delete/<str:filename>', views.delete, name='delete'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

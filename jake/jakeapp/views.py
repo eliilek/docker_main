@@ -10,6 +10,10 @@ from project import settings
 from random import shuffle
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 import json
+from django.core.files.storage import default_storage
+from django_rq import get_queue
+
+app_queue = get_queue('jake')
 
 # Create your views here.
 def signup(request):
@@ -375,3 +379,41 @@ def beacon(request):
 			module_instance.save()
 			return JsonResponse({"link":reverse("resume", args=(module_instance.pk,))})
 	return HttpResponse("OK")
+
+def queued(request):
+	if not request.user.is_superuser:
+		return render(request, "jakeapp/error.html", {"msg":"You are not authorized to view this page.\nPlease login as a superuser or use the above link to return to the menu."})
+	files = File.objects.all()
+	args = []
+	for file in files:
+		#Check if the file exists and is finished
+		args.append({'name':file.name, 'created':file.created, 'ready':default_storage.exists(file.name)})
+	return render(request, "jakeapp/queued.html", {"files":args})
+
+def retrieve(request, filename):
+	if not request.user.is_superuser:
+		return render(request, "jakeapp/error.html", {"msg":"You are not authorized to view this page.\nPlease login as a superuser or use the above link to return to the menu."})
+	try:
+		file = File.objects.get(name=filename)
+	except:
+		return render(request, "jakeapp/error.html", {"msg":"I couldn't find the file you're looking for.\nUse the above link to return to the main menu."})
+	if not default_storage.exists(filename):
+		return redirect("queued")
+
+	retrieved_file = default_storage.open(filename, 'r')
+
+	response = HttpResponse(retrieved_file, content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename=' + filename.replace(" ", "_").replace(",", "_")
+
+	return response
+
+def delete(request, filename):
+	if not request.user.is_superuser:
+		return render(request, "jakeapp/error.html", {"msg":"You are not authorized to view this page.\nPlease login as a superuser or use the above link to return to the menu."})
+	try:
+		file = File.objects.get(name=filename)
+	except:
+		return render(request, "jakeapp/error.html", {"msg":"I couldn't find the file you're looking for.\nUse the above link to return to the main menu."})
+	default_storage.delete(filename)
+	file.delete()
+	return redirect("queued")

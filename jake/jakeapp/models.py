@@ -78,6 +78,10 @@ class QuestionResponse(models.Model):
 			return True
 		return False
 
+	def string_responses(self):
+		r_list = [response.text for response in given_responses.all()]
+		return ", ".join(r_list)
+
 class Module(models.Model):
 	name = models.CharField(max_length=100)
 	ordering_number = models.PositiveSmallIntegerField(verbose_name="Ordering Number - Module 1 would be first, then ascending")
@@ -300,6 +304,7 @@ class SectionDuration(models.Model):
 	module_instance = models.ForeignKey(ModuleInstance, on_delete=models.CASCADE)
 	section = models.ForeignKey(ModuleSection, on_delete=models.CASCADE)
 	duration = models.DurationField(default=timezone.timedelta(milliseconds=0))
+	created = models.DateTimeField(auto_now_add=True, null=True)
 
 class ModuleSectionRewatch(models.Model):
 	module_section = models.ForeignKey(ModuleSection, on_delete=models.CASCADE)
@@ -311,3 +316,7 @@ class UserData(models.Model):
 	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	consented = models.DateTimeField(null=True, default=None, editable=False)
 	current_module_instance = models.ForeignKey(ModuleInstance, null=True, default=None, on_delete=models.SET_NULL)
+
+class File(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=200)	
