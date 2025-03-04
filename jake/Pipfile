@@ -15,6 +15,7 @@ crispy-bootstrap5 = "*"
 pytz = "*"
 boto3 = "*"
 unicodecsv = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
