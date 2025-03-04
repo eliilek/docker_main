@@ -79,7 +79,7 @@ class QuestionResponse(models.Model):
 		return False
 
 	def string_responses(self):
-		r_list = [response.text for response in given_responses.all()]
+		r_list = [response.text for response in self.given_responses.all()]
 		return ", ".join(r_list)
 
 class Module(models.Model):
