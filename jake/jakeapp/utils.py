@@ -39,7 +39,7 @@ def create_csv(args):
 	write_assessment_set(initial_assessment_set, writer)
 
 	#Modules
-	for module_instance in ModuleInstance.objects.filter(user=user).order_by("ordering_number"):
+	for module_instance in ModuleInstance.objects.filter(user=user).order_by("module__ordering_number"):
 		writer.writerow(["Module:" + module_instance.module.name, "Started:", module_instance.created.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y"), "Completed:", module_instance.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y")])
 		for section in module_instance.module.modulesection_set.all().order_by("ordering_number"):
 			writer.writerow(["Section " + str(section.ordering_number)])
