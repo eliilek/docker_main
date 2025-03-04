@@ -28,7 +28,7 @@ def create_csv(args):
 	writer = csv.writer(new_file, dialect='excel')
 
 	#User Info
-	user = get_user_model().get(pk=args['user_pk'])
+	user = get_user_model().objects.get(pk=args['user_pk'])
 	writer.writerow(['User Email', user.email])
 	writer.writerow([])
 
