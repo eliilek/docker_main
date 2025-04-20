@@ -1,0 +1,2 @@
+var payload = {"duration":Date.now()-start_time, "object_pk":object_pk, "object_type":object_type, "csrfmiddlewaretoken":'Xk8WZXx2UB78IPVCAIbWSvuKCJe9lKkyIY6NlPoaCKjCqefJmrxhvnOSqWSMAR3f', "module_section_pk":2};
+var payload = {"duration":Date.now()-start_time, "object_pk":object_pk, "object_type":object_type, "csrfmiddlewaretoken":'Xk8WZXx2UB78IPVCAIbWSvuKCJe9lKkyIY6NlPoaCKjCqefJmrxhvnOSqWSMAR3f', "module_section_pk":2};

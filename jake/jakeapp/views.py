@@ -39,8 +39,8 @@ def initial(request):
 	if request.user.is_superuser:
 		#return redirect("admin:index")
 		return render(request, "jakeapp/splash.html")
-	if not request.user.userdata.consented:
-		return redirect("consent")
+	#if not request.user.userdata.consented:
+	#	return redirect("consent")
 	if AssessmentInstanceSet.objects.filter(user=request.user).count() == 0:
 		#Create the first assessment set
 		try:
@@ -172,6 +172,8 @@ def football_response(request, response_pk):
 	return redirect(reverse("football_assessment", args=(football_response.section.instance.pk,)))
 
 def consent(request):
+	#TODO Remove if we need IC back
+	return redirect('initial')
 	if request.user.userdata.consented:
 		return redirect('initial')
 	if request.method == 'POST':
