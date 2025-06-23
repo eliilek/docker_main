@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from nluaba import settings
 import cloudinary
+cloudinary.config(CLOUDINARY_URL=settings.CLOUDINARY_STORAGE['CLOUDINARY_URL'])
 import cloudinary.uploader
 import cloudinary.api
 from cloudinary.models import CloudinaryField
