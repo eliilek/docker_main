@@ -30,8 +30,9 @@ services:
         entrypoint: /app/docker/waypoints-backend/server-entrypoint.sh
         volumes:
             - static_volume:/app/waypoints-backend/django_static
-        expose:
-            - 8000
+           environment:
+                   env_file:
+            - .env
         environment:
             DEBUG: "True"
             REDIS_URL: 'redis://redis:6379'
@@ -40,15 +41,11 @@ services:
             POSTGRES_NAME: waypoints-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            S3_ACCESS: /run/secrets/S3_ACCESS
-            S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL
-            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL
-            - POSTGRES_PASSWORD
+            C_URL: ${CLOUDINARY_URL}
+            S3_ACCESS: ${S3_ACCESS}
+            S3_SECRET: ${S3_SECRET}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
     nluaba-server:
         restart: unless-stopped
         build:
@@ -59,6 +56,8 @@ services:
             - static_volume:/app/nluaba-backend/django_static
         expose:
             - 8000
+        env_file:
+            - .env
         environment:
             DEBUG: "True"
             REDIS_URL: 'redis://redis:6379'
@@ -67,15 +66,11 @@ services:
             POSTGRES_NAME: nluaba-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            S3_ACCESS: /run/secrets/S3_ACCESS
-            S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL_OLD
-            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL_OLD
-            - POSTGRES_PASSWORD
+            C_URL: ${CLOUDINARY_URL_OLD}
+            S3_ACCESS: ${S3_ACCESS}
+            S3_SECRET: ${S3_SECRET}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
     jake-server:
         restart: unless-stopped
         build:
@@ -86,6 +81,8 @@ services:
             - static_volume:/app/jake-backend/django_static
         expose:
             - 8000
+        env_file:
+            - .env
         environment:
             DEBUG: "TRUE"
             REDIS_URL: 'redis://redis:6379'
@@ -94,15 +91,10 @@ services:
             POSTGRES_NAME: jake-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            S3_ACCESS: /run/secrets/S3_ACCESS
-            S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL
-            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL
-            - POSTGRES_PASSWORD
+            S3_ACCESS: ${S3_ACCESS}
+            S3_SECRET: ${S3_SECRET}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
     waypoints-worker:
         restart: unless-stopped
         build:
@@ -111,6 +103,8 @@ services:
         entrypoint: /app/docker/waypoints-backend/worker-entrypoint.sh
         volumes:
             - static_volume:/app/waypoints-backend/django_static
+        env_file:
+            - .env
         environment:
             DEBUG: "True"
             REDIS_URL: 'redis://redis:6379'
@@ -119,18 +113,14 @@ services:
             POSTGRES_NAME: waypoints-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            S3_ACCESS: /run/secrets/S3_ACCESS
-            S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL
-            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
+            C_URL: ${CLOUDINARY_URL}
+            S3_ACCESS: ${S3_ACCESS}
+            S3_SECRET: ${S3_SECRET}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         depends_on:
             - waypoints-server
             - redis
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL
-            - POSTGRES_PASSWORD
+
     nluaba-worker:
         restart: unless-stopped
         build:
@@ -139,6 +129,8 @@ services:
         entrypoint: /app/docker/nluaba-backend/worker-entrypoint.sh
         volumes:
             - static_volume:/app/nluaba-backend/django_static
+        env_file:
+            - .env
         environment:
             DEBUG: "True"
             REDIS_URL: 'redis://redis:6379'
@@ -147,18 +139,14 @@ services:
             POSTGRES_NAME: nluaba-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            S3_ACCESS: /run/secrets/S3_ACCESS
-            S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL_OLD
-            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
+            C_URL: ${CLOUDINARY_URL_OLD}
+            S3_ACCESS: ${S3_ACCESS}
+            S3_SECRET: ${S3_SECRET}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         depends_on:
             - nluaba-server
             - redis
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL_OLD
-            - POSTGRES_PASSWORD
+
     jake-worker:
         restart: unless-stopped
         build:
@@ -167,6 +155,8 @@ services:
         entrypoint: /app/docker/jake-backend/worker-entrypoint.sh
         volumes:
             - static_volume:/app/jake-backend/django_static
+        env_file:
+            - .env
         environment:
             DEBUG: "True"
             REDIS_URL: 'redis://redis:6379'
@@ -175,35 +165,18 @@ services:
             POSTGRES_NAME: jake-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            S3_ACCESS: /run/secrets/S3_ACCESS
-            S3_SECRET: /run/secrets/S3_SECRET
-            C_URL: /run/secrets/CLOUDINARY_URL
-            POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
+            S3_ACCESS: ${S3_ACCESS}
+            S3_SECRET: ${S3_SECRET}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         depends_on:
             - jake-server
             - redis
-        secrets:
-            - S3_ACCESS
-            - S3_SECRET
-            - CLOUDINARY_URL
-            - POSTGRES_PASSWORD
+ 
     redis:
         restart: unless-stopped
         image: redis:7.0.5-alpine 
         expose:
             - 6379
-
-secrets:
-    S3_ACCESS:
-        environment: S3_ACCESS
-    S3_SECRET:
-        environment: S3_SECRET
-    CLOUDINARY_URL:
-        environment: CLOUDINARY_URL
-    CLOUDINARY_URL_OLD:
-        environment: CLOUDINARY_URL_OLD
-    POSTGRES_PASSWORD:
-        environment: POSTGRES_PASSWORD
 
 volumes:
     static_volume: {}
