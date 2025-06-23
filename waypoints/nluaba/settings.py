@@ -201,6 +201,9 @@ CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.getenv('CLOUDINARY_URL'),
 }
 
+import cloudinary
+cloudinary.config(cloudinary_url=CLOUDINARY_STORAGE['CLOUDINARY_URL'])
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
