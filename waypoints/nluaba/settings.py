@@ -10,8 +10,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import django
 import dj_database_url
-#import django_heroku
+import django_heroku
 
 def get_secret(key, default=None):
     value = os.getenv(key, default)
@@ -191,7 +192,7 @@ AWS_DEFAULT_ACL = None
 AWS_S3_FILE_OVERWRITE = False
 
 # Activate Django-Heroku.
-#django_heroku.settings(locals())
+django_heroku.settings(locals())
 
 LOGIN_URL = '/accounts'
 LOGIN_REDIRECT_URL = '/'
@@ -221,3 +222,9 @@ LOGGING = {
         },
     },
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT', 587)
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
