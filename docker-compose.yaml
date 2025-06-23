@@ -30,8 +30,7 @@ services:
         entrypoint: /app/docker/waypoints-backend/server-entrypoint.sh
         volumes:
             - static_volume:/app/waypoints-backend/django_static
-           environment:
-                   env_file:
+        env_file:
             - .env
         environment:
             DEBUG: "True"
