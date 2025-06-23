@@ -197,7 +197,7 @@ LOGIN_URL = '/accounts'
 LOGIN_REDIRECT_URL = '/'
 
 CLOUDINARY_STORAGE = {
-    'CLOUDINARY_URL': get_secret('C_URL'),
+    'CLOUDINARY_URL': os.getenv('CLOUDINARY_URL'),
 }
 
 LOGGING = {

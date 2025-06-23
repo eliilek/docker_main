@@ -40,7 +40,7 @@ services:
             POSTGRES_NAME: waypoints-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            C_URL: ${CLOUDINARY_URL}
+            CLOUDINARY_URL: ${C_URL}
             S3_ACCESS: ${S3_ACCESS}
             S3_SECRET: ${S3_SECRET}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -65,7 +65,7 @@ services:
             POSTGRES_NAME: nluaba-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            C_URL: ${CLOUDINARY_URL_OLD}
+            CLOUDINARY_URL: ${C_URL_OLD}
             S3_ACCESS: ${S3_ACCESS}
             S3_SECRET: ${S3_SECRET}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -112,7 +112,7 @@ services:
             POSTGRES_NAME: waypoints-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            C_URL: ${CLOUDINARY_URL}
+            CLOUDINARY_URL: ${C_URL}
             S3_ACCESS: ${S3_ACCESS}
             S3_SECRET: ${S3_SECRET}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -138,7 +138,7 @@ services:
             POSTGRES_NAME: nluaba-db
             POSTGRES_USER: doadmin
             POSTGRES_PORT: 25060
-            C_URL: ${CLOUDINARY_URL_OLD}
+            CLOUDINARY_URL: ${C_URL_OLD}
             S3_ACCESS: ${S3_ACCESS}
             S3_SECRET: ${S3_SECRET}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
