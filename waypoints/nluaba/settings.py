@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import dj_database_url
-import django_heroku
+#import django_heroku
 
 def get_secret(key, default=None):
     value = os.getenv(key, default)
@@ -191,7 +191,7 @@ AWS_DEFAULT_ACL = None
 AWS_S3_FILE_OVERWRITE = False
 
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+#django_heroku.settings(locals())
 
 LOGIN_URL = '/accounts'
 LOGIN_REDIRECT_URL = '/'
