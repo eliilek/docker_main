@@ -201,13 +201,6 @@ CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.getenv('CLOUDINARY_URL'),
 }
 
-import cloudinary
-cloudinary.config(cloudinary_url=CLOUDINARY_STORAGE['CLOUDINARY_URL'])
-
-CLOUDINARY_STORAGE['CLOUD_NAME'] = cloudinary.config().cloud_name
-CLOUDINARY_STORAGE['API_KEY'] = cloudinary.config().api_key
-CLOUDINARY_STORAGE['API_SECRET'] = cloudinary.config().api_secret
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
