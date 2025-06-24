@@ -31,6 +31,8 @@ services:
         entrypoint: /app/docker/waypoints-backend/server-entrypoint.sh
         volumes:
             - static_volume:/app/waypoints-backend/django_static
+        ports:
+            - 25870:587
         env_file:
             - .env
         environment:
@@ -56,6 +58,8 @@ services:
             - static_volume:/app/nluaba-backend/django_static
         expose:
             - 8000
+        ports:
+            - 2587:587
         env_file:
             - .env
         environment:
