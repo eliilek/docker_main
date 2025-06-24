@@ -44,8 +44,6 @@ ADD ./docker /app/docker
 
 # Expose the port that the application listens on.
 EXPOSE 8000
-#Expose for email through django
-EXPOSE 587
 
 # Run the application.
 #CMD python3 manage.py runserver
