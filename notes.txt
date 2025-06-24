@@ -4,3 +4,7 @@ Option 1, delete manual cloudinary uploads*, through Django go through each Clou
 	Set up local dev env with Cloudinary settings (new), make sure we can connect to live DB from local
 	For each app, go through images
 	For each image, pull the public_id, find the local file matching that ID (split(".")[0]), CloudinaryUpload, set field to new file, save
+
+Pretty sure that's irrelevant but leaving just in case. EMAIL NOTES:
+Nginx conf needs to be updated to allow 587 communication between containers and outside world
+Dockerfiles currently expose 587 for container servers, may need changing

@@ -21,7 +21,6 @@ services:
         ports:
             - 80:80
             - 443:443
-            - 587:587
         volumes:
             - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     waypoints-server:
@@ -32,6 +31,8 @@ services:
         entrypoint: /app/docker/waypoints-backend/server-entrypoint.sh
         volumes:
             - static_volume:/app/waypoints-backend/django_static
+        ports:
+            - 587:587
         env_file:
             - .env
         environment:
@@ -57,6 +58,8 @@ services:
             - static_volume:/app/nluaba-backend/django_static
         expose:
             - 8000
+        ports:
+            - 587:587
         env_file:
             - .env
         environment:
