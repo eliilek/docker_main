@@ -1,10 +1,5 @@
-Upload to cloudinary may not have preserved IDs, different upload path makes that moot.
-Option 1, delete manual cloudinary uploads*, through Django go through each CloudinaryField and set it to reupload of same image (match public IDs)
-	Confirm downtime with Linsey
-	Set up local dev env with Cloudinary settings (new), make sure we can connect to live DB from local
-	For each app, go through images
-	For each image, pull the public_id, find the local file matching that ID (split(".")[0]), CloudinaryUpload, set field to new file, save
-
-Pretty sure that's irrelevant but leaving just in case. EMAIL NOTES:
-Nginx conf needs to be updated to allow 587 communication between containers and outside world
-Dockerfiles currently expose 587 for container servers, may need changing
+Made edits to default.conf and docker-compose.yaml to attempt to set up certbot and follow tutorial.
+All scripts and tutorials assume I'm running on linux
+Plan: do all of this from within the DO droplet
+Also figure out how to get the normal DO console working for ssh again? Did I enable some kind of firewall?
+Wait obviously this will fail it's trying to collect the file from over the internet but I'm testing on local. Kleinapp.com redirects to the DO which doesn't have the new nginx conf.
