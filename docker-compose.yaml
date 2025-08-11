@@ -15,8 +15,12 @@ networks:
     attachable: true # Needed in order to run custom commands in the container
 
 volumes:
-    - /etc/letsencrypt:
-    - static_volume: {}
+    letsencrypt:
+        name: /etc/letsencrypt
+        driver_opts:
+            o: "bind"
+            device: "/etc/letsencrypt"
+    static_volume: {}
 
 services:
     nginx:
