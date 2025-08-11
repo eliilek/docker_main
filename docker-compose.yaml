@@ -15,7 +15,7 @@ networks:
     attachable: true # Needed in order to run custom commands in the container
 
 volumes:
-    - /etc/letsencrypt
+    - /etc/letsencrypt:
     - static_volume: {}
 
 services:
