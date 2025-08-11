@@ -15,7 +15,8 @@ networks:
     attachable: true # Needed in order to run custom commands in the container
 
 volumes:
-    /etc/letsencrypt
+    - /etc/letsencrypt
+    - static_volume: {}
 
 services:
     nginx:
@@ -193,6 +194,3 @@ services:
         image: redis:7.0.5-alpine 
         expose:
             - 6379
-
-volumes:
-    static_volume: {}
