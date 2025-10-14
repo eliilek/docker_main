@@ -16,7 +16,7 @@ networks:
 
 volumes:
     letsencrypt:
-        name: /etc/letsencrypt
+        name: letsencrypt
         driver_opts:
             o: "bind"
             device: "/etc/letsencrypt"
@@ -32,7 +32,7 @@ services:
         volumes:
             - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
             - ./docker/certbot/www:/var/www/certbot
-            - /etc/letsencrypt:/etc/letsencrypt
+            - letsencrypt:/etc/letsencrypt
         command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     certbot:
         image: certbot/certbot:latest
