@@ -102,6 +102,8 @@ services:
             - static_volume:/app/jake-backend/django_static
         expose:
             - 8000
+        ports:
+            - 25871:20587
         env_file:
             - .env
         environment:
