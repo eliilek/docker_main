@@ -49,7 +49,7 @@ def start_daily_check():
 		"Prosocial Research Follow-Up",
 		"Thank you for your participation in my research on Prosocial. You are receiving this email as a reminder to log back in and complete the self-report measures one last time. Please answer them just as you did before. If you have any questions, please contact me at jab3477@ego.thechicagoschool.edu. Thank you.",
 		"jab3477@ego.thechicagoschool.edu",
-		[eliilek@gmail.com,],
+		["eliilek@gmail.com",],
 	)
 
 def write_assessment_set(assessment_instance_set, writer):
