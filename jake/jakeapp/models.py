@@ -129,6 +129,7 @@ class AssessmentInstanceSet(models.Model):
 	followed_module = models.ForeignKey(Module, null=True, on_delete=models.SET_NULL)
 	created = models.DateTimeField(auto_now_add=True)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	follow_up_assessment = models.BooleanField(default=False)
 
 	def completed(self):
 		for assessment_instance in self.assessmentinstance_set.all():
@@ -147,6 +148,12 @@ class AssessmentInstanceSet(models.Model):
 			if not assessment_instance.complete():
 				return (assessment_instance, "football")
 		return None
+	
+	def completed_time(self):
+		for assessment_instance in self.footballassessmentinstance_set.all():
+			if not assessment_instance.complete():
+				return None
+		return assessment_instance.completed
 
 class AssessmentInstance(models.Model):
 	assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
@@ -268,8 +275,8 @@ class AssessmentSet(models.Model):
 	football_assessment = models.ForeignKey(FootballAssessment, on_delete=models.CASCADE)
 	active = models.BooleanField(default=True)
 
-	def instantiate(self, user, followed_module=None):
-		instance_set = AssessmentInstanceSet(followed_module=followed_module, user=user)
+	def instantiate(self, user, followed_module=None, follow_up_assessment=False):
+		instance_set = AssessmentInstanceSet(followed_module=followed_module, user=user, follow_up_assessment=follow_up_assessment)
 		instance_set.save()
 		for assessment in self.assessments.all():
 			instance = AssessmentInstance(instance_set=instance_set, assessment=assessment)
@@ -316,6 +323,7 @@ class UserData(models.Model):
 	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	consented = models.DateTimeField(null=True, default=None, editable=False)
 	current_module_instance = models.ForeignKey(ModuleInstance, null=True, default=None, on_delete=models.SET_NULL)
+	follow_up_email_sent = models.BooleanField(default=False)
 
 class File(models.Model):
     created = models.DateTimeField(auto_now_add=True)

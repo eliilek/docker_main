@@ -2,8 +2,55 @@ from jakeapp.models import *
 from django.contrib.auth import get_user_model
 import unicodecsv as csv
 from django.core.files.storage import default_storage
+from django.core.mail import send_mail
 import datetime
 from django.utils import timezone
+from redis import Redis
+from rq import Queue
+from django_rq import get_queue
+from rq_scheduler import Scheduler
+
+def daily_check():
+	two_weeks_ago = timezone.now() - timezone.timedelta(weeks=2)
+	candidates = UserData.objects.filter(follow_up_email_sent=False)
+	for candidate in candidates:
+		unfinished_module_instances = ModuleInstance.objects.filter(user=candidate.user, completed__isnull=True)
+		if unfinished_module_instances.count() != 0:
+			continue
+		last_completed_module_instance = ModuleInstance.objects.filter(user=candidate.user, completed__isnull=False).order_by("module__ordering_number").last()
+		upcoming_modules = Module.objects.filter(ordering_number__gt=last_completed_module_instance.module.ordering_number)
+		if upcoming_modules.count() != 0:
+			continue
+		last_module_assessment_instance_set = AssessmentInstanceSet.objects.filter(user=candidate.user, followed_module=last_completed_module_instance.model)
+		if last_module_assessment_instance_set.count() == 1:
+			last_assessment_instance_set = last_module_assessment_instance_set.first()
+			if last_assessment_instance_set.completed() and last_assessment_instance_set.completed_time() < two_weeks_ago:
+				sent_mails = send_mail(
+					"Prosocial Research Follow-Up",
+					"Thank you for your participation in my research on Prosocial. You are receiving this email as a reminder to log back in and complete the self-report measures one last time. Please answer them just as you did before. If you have any questions, please contact me at jab3477@ego.thechicagoschool.edu. Thank you.",
+					"jab3477@ego.thechicagoschool.edu",
+					[candidate.user.email,],
+				)
+				if sent_mails == 1:
+					candidate.follow_up_email_sent = True
+					candidate.save()
+
+def start_daily_check():
+	queue = get_queue('jake')
+	scheduler = Scheduler(queue=queue, connection=queue.connection)
+
+	scheduler.cron(
+		"0 13 * * *",
+		func=daily_check(),
+		use_local_timezone=True
+	)
+
+	sent_mails = send_mail(
+		"Prosocial Research Follow-Up",
+		"Thank you for your participation in my research on Prosocial. You are receiving this email as a reminder to log back in and complete the self-report measures one last time. Please answer them just as you did before. If you have any questions, please contact me at jab3477@ego.thechicagoschool.edu. Thank you.",
+		"jab3477@ego.thechicagoschool.edu",
+		[eliilek@gmail.com,],
+	)
 
 def write_assessment_set(assessment_instance_set, writer):
 	for assessment_instance in assessment_instance_set.assessmentinstance_set.all():
@@ -35,12 +82,12 @@ def create_csv(args):
 	assessment_instance_sets = AssessmentInstanceSet.objects.filter(user=user)
 
 	#Initial Assessments
-	initial_assessment_set = assessment_instance_sets.get(followed_module=None)
+	initial_assessment_set = assessment_instance_sets.filter(followed_module=None).first()
 	write_assessment_set(initial_assessment_set, writer)
 
 	#Modules
 	for module_instance in ModuleInstance.objects.filter(user=user).order_by("module__ordering_number"):
-		writer.writerow(["Module:" + module_instance.module.name, "Started:", module_instance.created.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y"), "Completed:", module_instance.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y")])
+		writer.writerow(["Module:" + module_instance.module.name, "Started:", module_instance.created.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y"), "Completed:", (module_instance.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y") if module_instance.completed else "Incomplete")])
 		for section in module_instance.module.modulesection_set.all().order_by("ordering_number"):
 			writer.writerow(["Section " + str(section.ordering_number)])
 			for duration in SectionDuration.objects.filter(module_instance=module_instance, section=section):
@@ -60,6 +107,9 @@ def create_csv(args):
 		assessment_sets = assessment_instance_sets.filter(followed_module=module_instance.module)
 		for assessment_set in assessment_sets:
 			write_assessment_set(assessment_set, writer)
+	
+	if assessment_instance_sets.filter(followed_module=None).count() > 1:
+		write_assessment_set(assessment_instance_sets.filter(followed_module=None).last(), writer)
 
 	#Rewatches
 	writer.writerow([])

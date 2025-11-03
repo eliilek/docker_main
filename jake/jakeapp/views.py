@@ -78,6 +78,14 @@ def initial(request):
 		upcoming_modules = Module.objects.filter(ordering_number__gt=last_completed_ordering).order_by("ordering_number")
 		if upcoming_modules.count() != 0:
 			args['upcoming'] = upcoming_modules.first()
+		elif assessment_instance_set.first().completed_time() < timezone.now() - timezone.timedelta(weeks=2) and AssessmentInstanceSet.objects.filter(user=request.user, follow_up_assessment=True).count() == 0:
+			try:
+				active_set = AssessmentSet.objects.get(active=True)
+			except:
+				return render(request, "jakeapp/error.html", {"msg":"There is no active assessment set configured. Please contact your administrator."})
+			new_set = active_set.instantiate(request.user, None, follow_up_assessment=True)
+			return assessment(request, new_set.next()[0].pk)
+				
 	if completed_module_instances.count() != 0:
 		args['completed'] = completed_module_instances
 	return render(request, "jakeapp/menu.html", args)

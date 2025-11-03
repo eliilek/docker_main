@@ -17,6 +17,7 @@ boto3 = "*"
 unicodecsv = "*"
 psycopg2 = "*"
 gunicorn = "*"
+rq-scheduler = "*"
 
 [dev-packages]
 

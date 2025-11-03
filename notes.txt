@@ -1,5 +1,11 @@
-Made edits to default.conf and docker-compose.yaml to attempt to set up certbot and follow tutorial.
-All scripts and tutorials assume I'm running on linux
-Plan: do all of this from within the DO droplet
-Also figure out how to get the normal DO console working for ssh again? Did I enable some kind of firewall?
-Wait obviously this will fail it's trying to collect the file from over the internet but I'm testing on local. Kleinapp.com redirects to the DO which doesn't have the new nginx conf.
+Jake:
+*Emails are now sending
+*Figure out how to set a recurring job to run a script every 24 hours
+Create a python script that will pull any participants who finished more than 2 weeks ago and email them a link
+For the main redirect logic, enable anyone who finished more than 2 weeks ago to see a post-survey
+    May need to adjust survey logic, they'll now have multiple surveys not attached to a specific module
+Test this not on live maybe?
+
+Git push/pull, run script.sh, run start_daily_check() on jake container
+
+2 hours
