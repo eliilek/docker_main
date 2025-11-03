@@ -41,7 +41,7 @@ def start_daily_check():
 
 	scheduler.cron(
 		"0 13 * * *",
-		func=daily_check(),
+		func=daily_check,
 		use_local_timezone=True
 	)
 
