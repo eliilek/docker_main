@@ -66,7 +66,7 @@ def write_assessment_set(assessment_instance_set, writer):
 		writer.writerow(["Selfish Amount", "Selfish Choice Made"])
 		for section in football_instance.footballassessmentsection_set.all():
 			writer.writerow(["Name Info:", section.football_name.name, section.football_name.color, section.football_name.yards])
-			writer.writerow(["Created:", section.created.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y"), (section.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y") if section.completed else "None")]
+			writer.writerow(["Created:", section.created.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y"), (section.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y") if section.completed else "None")])
 			for response in section.footballresponse_set.all():
 				writer.writerow([response.selfish_amount, response.selfish_choice])
 		writer.writerow([])
