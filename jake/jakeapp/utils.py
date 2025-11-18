@@ -62,7 +62,7 @@ def write_assessment_set(assessment_instance_set, writer):
 				writer.writerow([assessment_question_response.assessment_question.text, assessment_question_response.given_response])
 		writer.writerow([])
 	for football_instance in assessment_instance_set.footballassessmentinstance_set.all():
-		writer.writerow(["Social Discounting Assessment", "Ascending:", football_instance.ascending, "Started:", football_instance.started.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y"), "Completed:", football_instance.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y")])
+		writer.writerow(["Social Discounting Assessment", "Ascending:", football_instance.ascending, "Started:", (football_instance.started.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y") if football_instance.started else "None"), "Completed:", (football_instance.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y") if football_instance.completed else "None")])
 		writer.writerow(["Selfish Amount", "Selfish Choice Made"])
 		for section in football_instance.footballassessmentsection_set.all():
 			writer.writerow(["Name Info:", section.football_name.name, section.football_name.color, section.football_name.yards])
