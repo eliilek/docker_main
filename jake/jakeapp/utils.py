@@ -54,7 +54,7 @@ def start_daily_check():
 
 def write_assessment_set(assessment_instance_set, writer):
 	for assessment_instance in assessment_instance_set.assessmentinstance_set.all():
-		writer.writerow([assessment_instance.assessment.name, "Started:", assessment_instance.started.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y"), "Completed:", assessment_instance.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y")])
+		writer.writerow([assessment_instance.assessment.name, "Started:", (assessment_instance.started.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y") if assessment_instance.started else "None"), "Completed:", (assessment_instance.completed.astimezone(timezone.get_default_timezone()).strftime("%H:%M:%S %b %d, %Y") if assessment_instance.completed else "None")])
 		writer.writerow(["Question Text", "Given Response(s)"])
 		for section in assessment_instance.assessment.assessment_sections.all():
 			writer.writerow(["Section:", section.name])
