@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('django-rq/', include('django_rq.urls')),
     re_path(r'accounts/', include('django.contrib.auth.urls')),
+    path('accounts', views.initial, name="initial"),
     path('', views.initial, name="initial"),
     path('consent', views.consent, name="consent"),
     path('quiz/<int:quiz_pk>', views.quiz, name="quiz"),
