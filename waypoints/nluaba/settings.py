@@ -75,6 +75,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://waypoints.kleinapp.com",
+    "http://waypoints.kleinapp.com",
+]
+
 RQ_QUEUES = {
     'waypoints': {
         'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'), # If you're on Heroku

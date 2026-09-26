@@ -73,6 +73,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://nluaba.kleinapp.com",
+    "http://nluaba.kleinapp.com",
+]
+
 RQ_QUEUES = {
     'nluaba': {
         'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'), # If you're on Heroku

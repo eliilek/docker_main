@@ -87,6 +87,11 @@ RQ_QUEUES = {
     }
 }
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://jake.kleinapp.com",
+    "http://jake.kleinapp.com",
+]
+
 ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
